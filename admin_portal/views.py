@@ -1,0 +1,246 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
+from django.contrib import messages
+from django.utils import timezone
+from .models import Employee, Task, Certificate, Department, UserGroup, GroupMember, Competency, DepartmentMember
+from .forms import EmployeeForm, TaskForm, CertificateVerificationForm
+from django.http import HttpResponse, JsonResponse
+from django.views import View
+from django.urls import reverse_lazy
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.http import url_has_allowed_host_and_scheme
+
+class AdminLoginView(LoginView):
+    template_name = 'admin_portal/login.html'
+    redirect_authenticated_user = True
+    success_url = '/admin-portal/dashboard/'
+
+    def get_success_url(self):
+        next_url = self.request.POST.get('next') or self.request.GET.get('next')
+        if next_url and next_url.startswith('/'):
+            return next_url
+        return self.success_url
+
+@login_required
+def dashboard(request):
+    department_count = Employee.objects.values('department').distinct().count()
+    employee_count = Employee.objects.count()
+    manager_count = Employee.objects.filter(designation__icontains='manager').count()
+    performing_users_count = Employee.objects.filter(performance_rating__gte=4).count()
+    
+    context = {
+        'department_count': department_count,
+        'employee_count': employee_count,
+        'manager_count': manager_count,
+        'performing_users_count': performing_users_count,
+        'performance_data': [65, 75, 70, 85, 80, 90, 88],  # Example data
+        'performance_labels': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']  # Example labels
+    }
+    return render(request, 'admin_portal/dashboard.html', context)
+
+@login_required
+def employee_list(request):
+    employees = Employee.objects.all()
+    departments = Department.objects.all()
+    return render(request, 'admin_portal/employee_list.html', {
+        'employees': employees,
+        'departments': departments
+    })
+
+@login_required
+def employee_detail(request, pk):
+    employee = get_object_or_404(Employee, pk=pk)
+    tasks = Task.objects.filter(employee=employee).order_by('-created_at')
+    certificates = Certificate.objects.filter(employee=employee)
+    context = {
+        'employee': employee,
+        'tasks': tasks,
+        'certificates': certificates,
+    }
+    return render(request, 'admin_portal/employee_detail.html', context)
+
+@login_required
+def employee_add(request):
+    if request.method == 'POST':
+        form = EmployeeForm(request.POST, request.FILES)
+        if form.is_valid():
+            employee = form.save()
+            messages.success(request, 'Employee added successfully.')
+            return redirect('admin_portal:employee_list')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+            departments = Department.objects.all()
+            return render(request, 'admin_portal/employee_list.html', {
+                'employees': Employee.objects.all(),
+                'departments': departments,
+                'form_errors': form.errors
+            })
+    return redirect('admin_portal:employee_list')
+
+@login_required
+def employee_edit(request, pk):
+    employee = get_object_or_404(Employee, pk=pk)
+    if request.method == 'POST':
+        form = EmployeeForm(request.POST, request.FILES, instance=employee)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_portal:employee_detail', pk=pk)
+    else:
+        form = EmployeeForm(instance=employee)
+    return render(request, 'admin_portal/employee_form.html', {'form': form, 'employee': employee})
+
+@login_required
+def employee_delete(request, pk):
+    employee = get_object_or_404(Employee, pk=pk)
+    if request.method == 'POST':
+        employee.delete()
+        return redirect('admin_portal:employee_list')
+    return render(request, 'admin_portal/employee_confirm_delete.html', {'employee': employee})
+
+@login_required
+def task_add(request):
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            task = form.save()
+            messages.success(request, 'Task added successfully.')
+            return redirect('admin_portal:employee_detail', pk=task.employee.pk)
+    else:
+        form = TaskForm()
+    
+    return render(request, 'admin_portal/task_form.html', {
+        'form': form,
+        'title': 'Add Task'
+    })
+
+@login_required
+def certificate_list(request):
+    certificates = Certificate.objects.filter(status='pending').order_by('-upload_date')
+    return render(request, 'admin_portal/certificate_list.html', {'certificates': certificates})
+
+@login_required
+def certificate_verify(request, cert_id):
+    certificate = get_object_or_404(Certificate, id=cert_id)
+    
+    if request.method == 'POST':
+        form = CertificateVerificationForm(request.POST, instance=certificate)
+        if form.is_valid():
+            cert = form.save(commit=False)
+            cert.verified_by = request.user
+            cert.verification_date = timezone.now()
+            if not cert.upload_date:
+                cert.upload_date = timezone.now()
+            cert.save()
+            messages.success(request, 'Certificate verification status updated.')
+            return redirect('admin_portal:certificate_list')
+    else:
+        form = CertificateVerificationForm(instance=certificate)
+    
+    context = {
+        'form': form,
+        'certificate': certificate,
+        'title': 'Verify Certificate',
+    }
+    return render(request, 'admin_portal/certificate_verify.html', context)
+
+@login_required
+def department_list(request):
+    departments = Department.objects.all()
+    context = {
+        'departments': departments,
+    }
+    return render(request, 'admin_portal/department_list.html', context)
+
+@login_required
+def department_add(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        if name:
+            Department.objects.create(name=name)
+            messages.success(request, 'Department added successfully.')
+            return redirect('admin_portal:department_list')
+    return redirect('admin_portal:department_list')
+
+@login_required
+def user_group_list(request):
+    groups = UserGroup.objects.all()
+    employees = Employee.objects.all()
+    context = {
+        'groups': groups,
+        'employees': employees,
+    }
+    return render(request, 'admin_portal/user_group_list.html', context)
+
+@login_required
+def add_user_group(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        if name:
+            UserGroup.objects.create(name=name)
+            messages.success(request, 'User Group added successfully.')
+        return redirect('admin_portal:user_group_list')
+    return redirect('admin_portal:user_group_list')
+
+@login_required
+def add_group_member(request, group_id):
+    if request.method == 'POST':
+        group = get_object_or_404(UserGroup, id=group_id)
+        employee_ids = request.POST.getlist('employee_ids')
+        
+        if employee_ids:
+            for employee_id in employee_ids:
+                employee = get_object_or_404(Employee, id=employee_id)
+                # Check if member already exists in group
+                if not GroupMember.objects.filter(group=group, employee=employee).exists():
+                    GroupMember.objects.create(
+                        name=employee.name,
+                        group=group,
+                        employee=employee
+                    )
+            messages.success(request, 'Members added successfully.')
+        return redirect('admin_portal:user_group_list')
+    return redirect('admin_portal:user_group_list')
+
+@login_required
+def add_competency(request, group_id):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        group = get_object_or_404(UserGroup, id=group_id)
+        if name:
+            Competency.objects.create(name=name, group=group)
+            messages.success(request, 'Competency added successfully.')
+        return redirect('admin_portal:user_group_list')
+    return redirect('admin_portal:user_group_list')
+
+@login_required
+def add_member_competency(request, group_id, member_id):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        group = get_object_or_404(UserGroup, id=group_id)
+        member = get_object_or_404(GroupMember, id=member_id, group=group)
+        if name:
+            # Get or create the competency for this group
+            competency, created = Competency.objects.get_or_create(name=name, group=group)
+            member.competencies.add(competency)
+            messages.success(request, 'Competency added to member successfully.')
+        return redirect('admin_portal:user_group_list')
+    return redirect('admin_portal:user_group_list')
+
+@csrf_exempt
+def rate_competency(request):
+    if request.method == 'POST':
+        return JsonResponse({'status': 'ok'})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+@login_required
+def add_department_member(request, department_id):
+    if request.method == 'POST':
+        department = get_object_or_404(Department, id=department_id)
+        name = request.POST.get('name')
+        if name:
+            DepartmentMember.objects.create(name=name, department=department)
+            messages.success(request, 'Member added to department successfully.')
+        return redirect('admin_portal:department_list')
+    return redirect('admin_portal:department_list')

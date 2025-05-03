@@ -1,0 +1,323 @@
+{% extends 'admin_portal/base.html' %}
+{% load static %}
+
+{% block title %}Employees{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <!-- Header with Search and Add Button -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="mb-0">Employees</h4>
+        <div class="d-flex gap-3 align-items-center">
+            <div class="search-box">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search" style="width: 300px;">
+            </div>
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                Add New Employee
+            </button>
+        </div>
+    </div>
+
+    <!-- Employee Table -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="py-3">No</th>
+                            <th class="py-3">Name</th>
+                            <th class="py-3">Employee ID</th>
+                            <th class="py-3">Designation</th>
+                            <th class="py-3">Department</th>
+                            <th class="py-3">Email ID</th>
+                            <th class="py-3">From</th>
+                            <th class="py-3 text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for employee in employees %}
+                        <tr>
+                            <td class="py-3">{{ forloop.counter }}</td>
+                            <td class="py-3">{{ employee.name }}</td>
+                            <td class="py-3">{{ employee.emp_id }}</td>
+                            <td class="py-3">{{ employee.designation }}</td>
+                            <td class="py-3">{{ employee.department }}</td>
+                            <td class="py-3">{{ employee.email }}</td>
+                            <td class="py-3">{{ employee.join_date|date:"M d, Y" }}</td>
+                            <td class="py-3 text-end">
+                                <div class="btn-group">
+                                    <a href="{% url 'admin_portal:employee_edit' pk=employee.pk %}" 
+                                       class="btn btn-sm btn-outline-secondary">
+                                        Edit
+                                    </a>
+                                    <a href="{% url 'admin_portal:employee_delete' pk=employee.pk %}" 
+                                       class="btn btn-sm btn-outline-danger">
+                                        Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <div class="text-muted">
+                                    <i class="fas fa-users fa-2x mb-3"></i>
+                                    <p class="mb-0">No employees found</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Employee Modal -->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title w-100 text-center fw-bold">Add New Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'admin_portal:employee_add' %}" enctype="multipart/form-data" class="needs-validation" novalidate>
+                {% csrf_token %}
+                <div class="modal-body">
+                    <!-- Profile Image Upload -->
+                    <div class="text-center mb-4">
+                        <div class="profile-upload-circle mx-auto">
+                            <input type="file" name="profile_image" id="profileImage" class="profile-upload-input" accept="image/*">
+                            <label for="profileImage" class="profile-upload-label">
+                                <i class="fas fa-camera"></i>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Employee Fields -->
+                    <div class="employee-fields p-4 bg-light rounded">
+                        <p class="text-muted mb-3">Employee Fields</p>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="emp_id" placeholder="Employee ID" required>
+                            <div class="invalid-feedback">Please enter an Employee ID.</div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="name" placeholder="Full Name" required>
+                            <div class="invalid-feedback">Please enter a Full Name.</div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="designation" placeholder="Designation" required>
+                            <div class="invalid-feedback">Please enter a Designation.</div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="date" class="form-control" name="join_date" required>
+                            <div class="invalid-feedback">Please select a Join Date.</div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" class="form-control" name="email" placeholder="Email" required>
+                            <div class="invalid-feedback">Please enter a valid Email.</div>
+                        </div>
+                        <div class="mb-3">
+                            <select class="form-select" name="department" required>
+                                <option value="">Select Department</option>
+                                {% for dept in departments %}
+                                <option value="{{ dept.id }}">{{ dept.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">Please select a Department.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 justify-content-center gap-2">
+                    <button type="submit" class="btn btn-primary px-4">Save</button>
+                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Search box styling */
+.search-box {
+    position: relative;
+}
+
+.search-box input {
+    padding-right: 2.5rem;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+/* Table styling */
+.table th {
+    font-weight: 600;
+    color: #495057;
+    border-bottom-width: 1px;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.btn-group .btn {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+/* Card styling */
+.card {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+/* Profile Upload Circle */
+.profile-upload-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    position: relative;
+    border: 2px dashed #dee2e6;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-upload-input {
+    display: none;
+}
+
+.profile-upload-label {
+    cursor: pointer;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-upload-label i {
+    font-size: 24px;
+    color: #6c757d;
+}
+
+/* Employee Fields Section */
+.employee-fields {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* Form Controls */
+.form-control, .form-select {
+    border: 1px solid #dee2e6;
+    padding: 0.75rem;
+    border-radius: 6px;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Modal Styling */
+.modal-content {
+    border: none;
+    border-radius: 12px;
+}
+
+.modal-dialog {
+    max-width: 500px;
+}
+
+.btn {
+    padding: 0.5rem 1.5rem;
+    border-radius: 6px;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-outline-primary {
+    color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-light {
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+}
+
+/* Form validation styles */
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+    border-color: #dc3545;
+}
+
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+    border-color: #198754;
+}
+
+.invalid-feedback {
+    display: none;
+    font-size: 0.875rem;
+    color: #dc3545;
+    margin-top: 0.25rem;
+}
+
+.was-validated .form-control:invalid ~ .invalid-feedback,
+.was-validated .form-select:invalid ~ .invalid-feedback {
+    display: block;
+}
+</style>
+
+<script>
+document.getElementById('searchInput').addEventListener('keyup', function() {
+    let filter = this.value.toLowerCase();
+    let tableRows = document.querySelectorAll('table tbody tr');
+    
+    tableRows.forEach(row => {
+        let text = row.textContent.toLowerCase();
+        row.style.display = text.includes(filter) ? '' : 'none';
+    });
+});
+
+// Form validation
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+
+// Profile image preview
+document.getElementById('profileImage').addEventListener('change', function(e) {
+    if (e.target.files && e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const label = document.querySelector('.profile-upload-label');
+            label.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+        }
+        reader.readAsDataURL(e.target.files[0]);
+    }
+});
+</script>
+{% endblock %} 

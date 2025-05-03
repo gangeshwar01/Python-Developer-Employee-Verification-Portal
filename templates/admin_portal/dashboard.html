@@ -1,0 +1,167 @@
+{% extends "admin_portal/base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Department</h6>
+                    <h2 class="card-title mb-0">{{ department_count }}</h2>
+                    <div class="mt-3">
+                        <i class="fas fa-building fa-2x text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Total Employees</h6>
+                    <h2 class="card-title mb-0">{{ employee_count }}</h2>
+                    <div class="mt-3">
+                        <i class="fas fa-users fa-2x text-success"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Managers</h6>
+                    <h2 class="card-title mb-0">{{ manager_count }}</h2>
+                    <div class="mt-3">
+                        <i class="fas fa-user-tie fa-2x text-info"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Performing Users</h6>
+                    <h2 class="card-title mb-0">{{ performing_users_count }}</h2>
+                    <div class="mt-3">
+                        <i class="fas fa-star fa-2x text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Graph -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title mb-4">Performance Statistics</h5>
+            <div id="performanceChart" style="height: 400px;"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .card-title {
+        color: #2d3748;
+        font-weight: 600;
+    }
+
+    .card-subtitle {
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .text-primary {
+        color: #4299e1 !important;
+    }
+
+    .text-success {
+        color: #48bb78 !important;
+    }
+
+    .text-info {
+        color: #4fd1c5 !important;
+    }
+
+    .text-warning {
+        color: #ecc94b !important;
+    }
+</style>
+
+<!-- ApexCharts JS -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var options = {
+            series: [{
+                name: 'Performance',
+                data: {{ performance_data|safe }}
+            }],
+            chart: {
+                type: 'area',
+                height: 350,
+                toolbar: {
+                    show: false
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 2
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.3,
+                    stops: [0, 90, 100]
+                }
+            },
+            xaxis: {
+                categories: {{ performance_labels|safe }},
+                labels: {
+                    style: {
+                        colors: '#718096'
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: '#718096'
+                    }
+                }
+            },
+            tooltip: {
+                theme: 'dark'
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+                strokeDashArray: 5
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#performanceChart"), options);
+        chart.render();
+    });
+</script>
+{% endblock %} 

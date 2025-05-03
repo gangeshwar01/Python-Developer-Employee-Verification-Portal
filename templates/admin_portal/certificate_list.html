@@ -1,0 +1,101 @@
+{% extends 'admin_portal/base.html' %}
+
+{% block title %}Certificates{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Pending Certificates</h2>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            {% if certificates %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Title</th>
+                                <th>Upload Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cert in certificates %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'admin_portal:employee_detail' pk=cert.employee.id %}">
+                                            {{ cert.employee.name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ cert.title }}</td>
+                                    <td>{{ cert.upload_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        {% if cert.file %}
+                                            <a href="{{ cert.file.url }}" class="btn btn-sm btn-info me-2" target="_blank">
+                                                <i class="fas fa-download"></i> View
+                                            </a>
+                                        {% endif %}
+                                        <a href="{% url 'admin_portal:certificate_verify' cert_id=cert.id %}" class="btn btn-sm btn-warning">
+                                            <i class="fas fa-check-circle"></i> Verify
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-certificate fa-3x text-muted mb-3"></i>
+                    <p class="text-muted mb-0">No pending certificates found.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .table th {
+        font-weight: 600;
+        color: #4a5568;
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #e2e8f0;
+    }
+    
+    .table td {
+        vertical-align: middle;
+        color: #2d3748;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+    
+    .btn-info {
+        background-color: #4299e1;
+        border-color: #4299e1;
+        color: white;
+    }
+    
+    .btn-info:hover {
+        background-color: #3182ce;
+        border-color: #3182ce;
+        color: white;
+    }
+    
+    .btn-warning {
+        background-color: #ecc94b;
+        border-color: #ecc94b;
+        color: #744210;
+    }
+    
+    .btn-warning:hover {
+        background-color: #d69e2e;
+        border-color: #d69e2e;
+        color: #744210;
+    }
+</style>
+{% endblock %} 
