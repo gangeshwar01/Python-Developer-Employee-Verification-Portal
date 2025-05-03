@@ -12,7 +12,7 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
-        value: False
+        value: True
       - key: ALLOWED_HOSTS
         value: employee-verification-portal.onrender.com
       - key: DATABASE_URL
