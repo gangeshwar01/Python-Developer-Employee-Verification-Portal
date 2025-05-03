@@ -3,7 +3,7 @@ services:
     name: employee-verification-portal
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('gangeshwar', 'gangeshwarkumar001@gmail.com', 'zm-int-25006')" | python manage.py shell && python manage.py migrate && gunicorn employee_portal.wsgi:application
+    startCommand: python manage.py migrate && gunicorn employee_portal.wsgi:application
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.0
