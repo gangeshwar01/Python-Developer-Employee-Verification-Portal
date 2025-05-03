@@ -3,7 +3,7 @@ services:
     name: employee-verification-portal
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn employee_portal.wsgi:application
+    startCommand: python manage.py migrate && gunicorn employee_portal.wsgi:application
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.0
