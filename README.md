@@ -1,55 +1,91 @@
-# Employee Info & Certificate Verification Portal
+# Employee Verification Portal
 
-A secure and responsive system for employees to view their data and upload certificates for verification.
+A comprehensive web application for managing employee verification, certificates, and administrative tasks. Built with Django and deployed on Render.
 
 ## Features
 
-### Admin Module
-- Admin Login
-- View/Add/Edit Employee Information
-- View & Verify Certificates
-- View Task Records
+- **Admin Portal**
+  - Secure admin authentication
+  - Employee management
+  - Certificate verification
+  - Task management
+  - Department management
+  - User group management
+  - Competency tracking
 
-### Employee Module
-- Enter ID to access Profile
-- View Task History
-- Upload Certificates
-- View Certificate Verification Status
+- **Employee Portal**
+  - Employee login with ID
+  - Certificate upload and tracking
+  - Task viewing
+  - Profile management
 
-## Technology Stack
-- Frontend: HTML, CSS
-- Backend: Python (Django)
-- Database: MySQL
+## Tech Stack
+
+- Python 3.9
+- Django 5.0
+- PostgreSQL
+- Bootstrap
+- Whitenoise for static files
 
 ## Setup Instructions
 
-1. Create a virtual environment:
+1. Clone the repository:
+```bash
+git clone https://github.com/gangeshwar01/Python-Developer-Employee-Verification-Portal.git
+cd Python-Developer-Employee-Verification-Portal
+```
+
+2. Create and activate virtual environment:
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-2. Install dependencies:
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Configure database settings in settings.py
+4. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your configuration
+```
 
-4. Run migrations:
+5. Run migrations:
 ```bash
 python manage.py migrate
 ```
 
-5. Create superuser:
+6. Create superuser:
 ```bash
 python manage.py createsuperuser
 ```
 
-6. Run development server:
+7. Run development server:
 ```bash
 python manage.py runserver
 ```
+
+## Deployment
+
+The application is configured for deployment on Render. The `render.yaml` file contains the necessary configuration for:
+- Web service
+- PostgreSQL database
+- Environment variables
+- Build and start commands
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Database Schema
 
