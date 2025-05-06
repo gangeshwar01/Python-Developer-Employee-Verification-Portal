@@ -18,10 +18,15 @@ class Employee(models.Model):
         return f"{self.name} ({self.emp_id})"
 
 class Task(models.Model):
+    STATUS_CHOICES = [
+        ('In Progress', 'In Progress'),
+        ('Completed', 'Completed'),
+    ]
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='tasks')
     title = models.CharField(max_length=200)
     description = models.TextField()
     date = models.DateField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='In Progress')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
