@@ -34,12 +34,36 @@
             background-color: var(--sidebar-bg);
             border-right: 1px solid rgba(0,0,0,.1);
             z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        #sidebar.hide {
+            transform: translateX(-100%);
+        }
+
+        #sidebar.show {
+            transform: translateX(0);
+        }
+
+        #sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1100;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 0.5rem 0.75rem;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         #content {
             margin-left: var(--sidebar-width);
             min-height: 100vh;
             padding: 1rem;
+            transition: margin-left 0.3s ease;
         }
 
         .company-logo {
@@ -86,11 +110,12 @@
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
             }
-
             #sidebar.show {
                 transform: translateX(0);
             }
-
+            #sidebar-toggle {
+                display: block;
+            }
             #content {
                 margin-left: 0;
             }
@@ -99,9 +124,10 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+    <button id="sidebar-toggle" class="d-md-none">☰</button>
     <!-- Sidebar -->
     {% if request.user.is_authenticated %}
-    <nav id="sidebar">
+    <nav id="sidebar" class="hide">
         <div class="company-logo">
             <img src="{% static 'images/logo.svg' %}" alt="Company Logo" style="max-width: 150px; height: auto;">
         </div>
@@ -169,6 +195,14 @@
     {% block extra_js %}{% endblock %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            var sidebar = document.getElementById('sidebar');
+            var toggle = document.getElementById('sidebar-toggle');
+            if (toggle && sidebar) {
+                toggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('show');
+                    sidebar.classList.toggle('hide');
+                });
+            }
             setTimeout(function() {
                 document.querySelectorAll('.alert-dismissible').forEach(function(alert) {
                     // Bootstrap 5: use the built-in close method if available

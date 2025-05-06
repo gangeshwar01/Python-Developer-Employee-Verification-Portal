@@ -8,18 +8,18 @@
 
     <div class="card shadow-sm">
         <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
+            <div class="table-responsive-sm table-responsive-md table-responsive-lg">
+                <table class="table table-hover mb-0 align-middle">
                     <thead class="bg-light">
                         <tr>
-                            <th class="py-3" style="width: 80px;">No</th>
-                            <th class="py-3">
+                            <th class="py-3" style="width: 80px; min-width: 60px;">No</th>
+                            <th class="py-3" style="min-width: 180px;">
                                 Department Name
                                 <button type="button" class="btn btn-dark btn-sm float-end" data-bs-toggle="modal" data-bs-target="#addDepartmentModal">
                                     Add Department
                                 </button>
                             </th>
-                            <th class="py-3">
+                            <th class="py-3" style="min-width: 200px;">
                                 Member List
                                 <button type="button" class="btn btn-dark btn-sm float-end" id="addMemberBtn" disabled>
                                     Add Member
@@ -240,6 +240,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .btn {
     min-width: 100px;
+}
+
+@media (max-width: 768px) {
+    .modal-dialog {
+        max-width: 95vw;
+        margin: 1rem auto;
+    }
+    .modal-content {
+        border-radius: 0.5rem;
+    }
+    .table th, .table td {
+        font-size: 0.95rem;
+        padding: 0.5rem 0.3rem;
+    }
+    .container-fluid.p-4 {
+        padding: 1rem !important;
+    }
+    .card {
+        border-radius: 0.5rem;
+    }
+}
+@media (max-width: 576px) {
+    .modal-dialog {
+        max-width: 100vw;
+        margin: 0.5rem auto;
+    }
+    .modal-content {
+        border-radius: 0.3rem;
+    }
+    .table th, .table td {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.2rem;
+    }
+    .container-fluid.p-4 {
+        padding: 0.5rem !important;
+    }
 }
 </style>
 {% endblock %} 

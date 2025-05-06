@@ -161,8 +161,10 @@ def certificate_verify(request, cert_id):
 @login_required
 def department_list(request):
     departments = Department.objects.all()
+    employees = Employee.objects.all()
     context = {
         'departments': departments,
+        'employees': employees,
     }
     return render(request, 'admin_portal/department_list.html', context)
 
