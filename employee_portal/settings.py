@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
+import re
 
 # Load environment variables
 load_dotenv()
@@ -82,11 +83,14 @@ WSGI_APPLICATION = 'employee_portal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+db_url = os.getenv('DATABASE_URL', 'sqlite:///db.sqlite3')
+is_postgres = db_url.startswith('postgres://') or db_url.startswith('postgresql://')
+
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL', 'sqlite:///db.sqlite3'),
+        default=db_url,
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=is_postgres
     )
 }
 
