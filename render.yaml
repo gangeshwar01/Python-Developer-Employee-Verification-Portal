@@ -25,10 +25,10 @@ services:
       mountPath: /opt/render/project/src/media
       sizeGB: 1
 #
-# Django superuser credentials for first-time setup:
-# Username: admin
-# Password: admin
-# Email: admin@example.com
+Django superuser credentials for first-time setup:
+Username: admin
+Password: admin
+Email: admin@example.com
 
 databases:
   - name: employee-portal-db
