@@ -39,7 +39,7 @@ class Certificate(models.Model):
     title = models.CharField(max_length=200)
     file = models.FileField(upload_to='certificates/', null=True, blank=True)
     upload_date = models.DateField(default=timezone.now)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='In Progress')
     verification_date = models.DateField(null=True, blank=True)
     verified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     rejection_reason = models.TextField(null=True, blank=True)
