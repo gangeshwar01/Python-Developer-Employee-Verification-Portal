@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (addMemberBtn) addMemberBtn.disabled = false;
             selectedDepartmentId = departmentId;
             selectedDepartmentName.textContent = departmentName;
-            addMemberForm.action = `/departments/${departmentId}/add-member/`;
+            addMemberForm.action = `/admin-portal/departments/${departmentId}/add-member/`;
             document.getElementById('memberName').value = '';
         });
     });
