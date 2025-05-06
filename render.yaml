@@ -2,7 +2,7 @@ services:
   - type: web
     name: employee-verification-portal
     env: python
-    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    buildCommand: rm -rf staticfiles && pip install -r requirements.txt && python manage.py collectstatic --noinput
     startCommand: python manage.py migrate && python manage.py createsu && gunicorn employee_portal.wsgi:application
     envVars:
       - key: PYTHON_VERSION
