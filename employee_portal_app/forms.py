@@ -1,5 +1,5 @@
 from django import forms
-from admin_portal.models import Certificate
+from admin_portal.models import Certificate, Task
 
 class CertificateUploadForm(forms.ModelForm):
     class Meta:
@@ -23,4 +23,15 @@ class CertificateUploadForm(forms.ModelForm):
             ext = os.path.splitext(file.name)[1].lower()
             if ext not in valid_extensions:
                 raise forms.ValidationError('Unsupported file type. Please upload PDF or image files.')
-        return file 
+        return file
+
+class EmployeeTaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['title', 'description', 'date', 'status']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+        } 
