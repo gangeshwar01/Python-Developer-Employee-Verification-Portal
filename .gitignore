@@ -20,10 +20,19 @@ wheels/
 .installed.cfg
 *.egg
 
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
 # Virtual Environment
 venv/
-env/
 ENV/
+env/
+.env
 
 # IDE
 .idea/
@@ -31,12 +40,6 @@ ENV/
 *.swp
 *.swo
 
-# Django
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-
-# Environment variables
-.env
-.env.local 
+# OS
+.DS_Store
+Thumbs.db 

@@ -4,6 +4,9 @@ from admin_portal.models import Employee, Certificate, Task
 from django.core.files.storage import FileSystemStorage
 from django.utils import timezone
 from .forms import CertificateUploadForm
+import logging
+
+logger = logging.getLogger(__name__)
 
 def employee_login(request):
     if request.method == 'POST':
@@ -11,9 +14,14 @@ def employee_login(request):
         try:
             employee = Employee.objects.get(emp_id=emp_id)
             request.session['employee_id'] = employee.id
+            logger.info(f"Employee {emp_id} logged in successfully")
             return redirect('employee_portal:employee_dashboard')
         except Employee.DoesNotExist:
+            logger.warning(f"Failed login attempt for employee ID: {emp_id}")
             messages.error(request, 'Invalid Employee ID')
+        except Exception as e:
+            logger.error(f"Error during employee login: {str(e)}")
+            messages.error(request, 'An error occurred during login. Please try again.')
     return render(request, 'employee_portal/login.html')
 
 def employee_dashboard(request):

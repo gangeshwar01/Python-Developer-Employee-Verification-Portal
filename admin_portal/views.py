@@ -11,6 +11,9 @@ from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.http import url_has_allowed_host_and_scheme
+import logging
+
+logger = logging.getLogger(__name__)
 
 class AdminLoginView(LoginView):
     template_name = 'admin_portal/login.html'
@@ -19,9 +22,19 @@ class AdminLoginView(LoginView):
 
     def get_success_url(self):
         next_url = self.request.POST.get('next') or self.request.GET.get('next')
-        if next_url and next_url.startswith('/'):
+        if next_url and url_has_allowed_host_and_scheme(next_url, self.request.get_host()):
             return next_url
         return self.success_url
+
+    def form_valid(self, form):
+        try:
+            response = super().form_valid(form)
+            logger.info(f"Admin user {form.get_user().username} logged in successfully")
+            return response
+        except Exception as e:
+            logger.error(f"Error during admin login: {str(e)}")
+            messages.error(self.request, 'An error occurred during login. Please try again.')
+            return self.form_invalid(form)
 
 @login_required
 def dashboard(request):
