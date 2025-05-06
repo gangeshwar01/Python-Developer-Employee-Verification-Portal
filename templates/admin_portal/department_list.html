@@ -159,9 +159,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     addMemberForm.addEventListener('submit', function(e) {
         const memberName = document.getElementById('memberName').value.trim();
-        if (!memberName) {
+        const employeeId = document.getElementById('employeeSelect').value;
+        if (!memberName && !employeeId) {
             e.preventDefault();
-            alert('Please enter a member name');
+            alert('Please select an employee or enter a member name');
         }
     });
 });
