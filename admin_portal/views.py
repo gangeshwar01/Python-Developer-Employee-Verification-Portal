@@ -249,11 +249,17 @@ def rate_competency(request):
 
 @login_required
 def add_department_member(request, department_id):
+    department = get_object_or_404(Department, id=department_id)
+    employees = Employee.objects.all()
     if request.method == 'POST':
-        department = get_object_or_404(Department, id=department_id)
+        employee_id = request.POST.get('employee_id')
         name = request.POST.get('name')
-        if name:
+        if employee_id:
+            employee = Employee.objects.get(id=employee_id)
+            DepartmentMember.objects.create(name=employee.name, department=department)
+            messages.success(request, f'Member {employee.name} added to department successfully.')
+        elif name:
             DepartmentMember.objects.create(name=name, department=department)
-            messages.success(request, 'Member added to department successfully.')
+            messages.success(request, f'Member {name} added to department successfully.')
         return redirect('admin_portal:department_list')
-    return redirect('admin_portal:department_list')
+    return render(request, 'admin_portal/add_department_member.html', {'department': department, 'employees': employees})

@@ -100,8 +100,17 @@
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="memberName" class="form-label">Member Name</label>
-                        <input type="text" class="form-control" id="memberName" name="name" required placeholder="Enter member name">
+                        <label for="employeeSelect" class="form-label">Select Existing Employee</label>
+                        <select class="form-select" id="employeeSelect" name="employee_id">
+                            <option value="">-- Select Employee --</option>
+                            {% for emp in employees %}
+                                <option value="{{ emp.id }}">{{ emp.name }} ({{ emp.emp_id }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="memberName" class="form-label">Or Enter New Member Name</label>
+                        <input type="text" class="form-control" id="memberName" name="name" placeholder="Enter member name">
                     </div>
                 </div>
                 <div class="modal-footer border-0 justify-content-center gap-2">
