@@ -2,8 +2,8 @@ services:
   - type: web
     name: employee-verification-portal
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python manage.py migrate && gunicorn employee_portal.wsgi:application
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: python manage.py migrate && python manage.py createsu && gunicorn employee_portal.wsgi:application
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.0
@@ -19,6 +19,12 @@ services:
         fromDatabase:
           name: employee-portal-db
           property: connectionString
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: admin
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: admin@example.com
+      - key: DJANGO_SUPERUSER_PASSWORD
+        value: admin
     plan: free
     disk:
       name: employee-portal-disk
