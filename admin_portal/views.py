@@ -256,11 +256,18 @@ def add_department_member(request, department_id):
     if request.method == 'POST':
         employee_id = request.POST.get('employee_id')
         name = request.POST.get('name')
+        # Check for duplicate by employee or name
         if employee_id:
             employee = Employee.objects.get(id=employee_id)
+            if DepartmentMember.objects.filter(department=department, name=employee.name).exists():
+                messages.error(request, f'Member {employee.name} is already in this department.')
+                return redirect('admin_portal:department_list')
             DepartmentMember.objects.create(name=employee.name, department=department)
             messages.success(request, f'Member {employee.name} added to department successfully.')
         elif name:
+            if DepartmentMember.objects.filter(department=department, name=name).exists():
+                messages.error(request, f'Member {name} is already in this department.')
+                return redirect('admin_portal:department_list')
             DepartmentMember.objects.create(name=name, department=department)
             messages.success(request, f'Member {name} added to department successfully.')
         return redirect('admin_portal:department_list')
