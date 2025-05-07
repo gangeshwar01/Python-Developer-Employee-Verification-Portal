@@ -4,7 +4,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.utils import timezone
 from .models import Employee, Task, Certificate, Department, UserGroup, GroupMember, Competency, DepartmentMember
-from .forms import EmployeeForm, TaskForm, CertificateVerificationForm
+from .forms import EmployeeForm, TaskForm, CertificateVerificationForm, CertificateForm
 from django.http import HttpResponse, JsonResponse
 from django.views import View
 from django.urls import reverse_lazy
@@ -296,3 +296,42 @@ def delete_department_members(request, department_id):
         return redirect('admin_portal:department_list')
     # For GET, redirect to department list
     return redirect('admin_portal:department_list')
+
+@login_required
+def add_certificate(request, employee_id):
+    employee = get_object_or_404(Employee, pk=employee_id)
+    if request.method == 'POST':
+        form = CertificateForm(request.POST, request.FILES)
+        if form.is_valid():
+            cert = form.save(commit=False)
+            cert.employee = employee
+            cert.status = 'pending'
+            cert.save()
+            messages.success(request, 'Certificate uploaded successfully.')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    return redirect('admin_portal:employee_detail', pk=employee_id)
+
+@login_required
+def edit_certificate(request, cert_id):
+    cert = get_object_or_404(Certificate, pk=cert_id)
+    if request.method == 'POST':
+        form = CertificateForm(request.POST, request.FILES, instance=cert)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Certificate updated successfully.')
+            return redirect('admin_portal:employee_detail', pk=cert.employee.pk)
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = CertificateForm(instance=cert)
+    return render(request, 'admin_portal/edit_certificate_modal.html', {'form': form, 'certificate': cert})
+
+@login_required
+def delete_certificate(request, cert_id):
+    cert = get_object_or_404(Certificate, pk=cert_id)
+    employee_id = cert.employee.pk
+    if request.method == 'POST':
+        cert.delete()
+        messages.success(request, 'Certificate deleted successfully.')
+    return redirect('admin_portal:employee_detail', pk=employee_id)

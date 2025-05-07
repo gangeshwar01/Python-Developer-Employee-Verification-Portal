@@ -36,4 +36,13 @@ class CertificateVerificationForm(forms.ModelForm):
         rejection_reason = cleaned_data.get('rejection_reason')
 
         if status == 'rejected' and not rejection_reason:
-            raise forms.ValidationError("Please provide a reason for rejection.") 
+            raise forms.ValidationError("Please provide a reason for rejection.")
+
+class CertificateForm(forms.ModelForm):
+    class Meta:
+        model = Certificate
+        fields = ['title', 'file']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'file': forms.FileInput(attrs={'class': 'form-control'})
+        } 

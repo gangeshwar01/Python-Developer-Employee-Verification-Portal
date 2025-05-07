@@ -15,6 +15,7 @@ urlpatterns = [
     path('employees/<int:pk>/', views.employee_detail, name='employee_detail'),
     path('employees/<int:pk>/edit/', views.employee_edit, name='employee_edit'),
     path('employees/<int:pk>/delete/', views.employee_delete, name='employee_delete'),
+    path('employees/<int:employee_id>/add-certificate/', views.add_certificate, name='add_certificate'),
     
     # Task URLs
     path('tasks/add/', views.task_add, name='task_add'),
@@ -22,6 +23,8 @@ urlpatterns = [
     # Certificate URLs
     path('certificates/', views.certificate_list, name='certificate_list'),
     path('certificates/<int:cert_id>/verify/', views.certificate_verify, name='certificate_verify'),
+    path('certificates/<int:cert_id>/edit/', views.edit_certificate, name='edit_certificate'),
+    path('certificates/<int:cert_id>/delete/', views.delete_certificate, name='delete_certificate'),
     
     # Department URLs
     path('departments/', views.department_list, name='department_list'),
