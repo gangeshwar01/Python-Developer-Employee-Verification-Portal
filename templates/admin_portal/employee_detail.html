@@ -62,11 +62,11 @@
                         </div>
                         <div class="col-md-6">
                             <label class="text-muted small">Department</label>
-                            <p class="mb-0">{{ employee.department }}</p>
+                            <p class="mb-0">{{ employee.department.name|default:"Not provided" if employee.department else "Not provided" }}</p>
                         </div>
                         <div class="col-md-6">
                             <label class="text-muted small">Email</label>
-                            <p class="mb-0">{{ employee.email }}</p>
+                            <p class="mb-0">{{ employee.email|default:"Not provided" }}</p>
                         </div>
                         <div class="col-md-6">
                             <label class="text-muted small">Phone</label>
@@ -75,6 +75,10 @@
                         <div class="col-md-6">
                             <label class="text-muted small">Join Date</label>
                             <p class="mb-0">{{ employee.join_date|date:"M d, Y" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">Left Date</label>
+                            <p class="mb-0">{{ employee.left_date|date:"M d, Y"|default:"Not provided" }}</p>
                         </div>
                         <div class="col-md-6">
                             <label class="text-muted small">Address</label>
