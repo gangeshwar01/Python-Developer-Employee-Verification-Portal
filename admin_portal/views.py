@@ -391,14 +391,3 @@ def delete_certificate_request(request, request_id):
 def view_certificate(request, cert_id):
     certificate = get_object_or_404(Certificate, id=cert_id)
     return render(request, 'admin_portal/certificate_detail.html', {'certificate': certificate})
-
-def debug_list_tasks(request):
-    emp_id = request.GET.get('emp_id')
-    if not emp_id:
-        return HttpResponse('Please provide emp_id as a query parameter.', content_type='text/plain')
-    try:
-        employee = Employee.objects.get(emp_id=emp_id)
-    except Employee.DoesNotExist:
-        return HttpResponse(f'No employee found with emp_id={emp_id}', content_type='text/plain')
-    tasks = Task.objects.filter(employee=employee).values('id', 'title', 'description', 'date', 'status')
-    return JsonResponse(list(tasks), safe=False)
