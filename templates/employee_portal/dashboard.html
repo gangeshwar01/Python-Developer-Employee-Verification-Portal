@@ -186,11 +186,36 @@
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             {% endif %}
-                                            <a href="{% url 'employee_portal:certificate_status' cert.id %}" class="btn btn-sm btn-info">
-                                                <i class="fas fa-info-circle"></i>
-                                            </a>
+                                            <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#requestModal{{ cert.id }}">
+                                                <i class="fas fa-paper-plane"></i> Request
+                                            </button>
                                         </td>
                                     </tr>
+                                    <!-- Request Modal -->
+                                    <div class="modal fade" id="requestModal{{ cert.id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Request Admin Action</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form method="post" action="{% url 'employee_portal:certificate_request' %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="certificate_id" value="{{ cert.id }}">
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Message</label>
+                                                            <textarea name="message" class="form-control" rows="3" required></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-primary">Send Request</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -206,6 +231,31 @@
                     {% endif %}
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Add new section for Notifications -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0">Notifications</h5>
+        </div>
+        <div class="card-body">
+            {% if notifications %}
+                <ul class="list-group">
+                    {% for notification in notifications %}
+                    <li class="list-group-item">
+                        <strong>{{ notification.title }}</strong>
+                        <p class="mb-0">{{ notification.message }}</p>
+                        <small class="text-muted">{{ notification.created_at|date:"M d, Y" }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-bell fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No notifications yet.</p>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

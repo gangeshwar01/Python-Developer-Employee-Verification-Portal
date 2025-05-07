@@ -47,35 +47,6 @@ def employee_dashboard(request):
     }
     return render(request, 'employee_portal/dashboard.html', context)
 
-def upload_certificate(request):
-    if 'employee_id' not in request.session:
-        return redirect('employee_portal:employee_login')
-    
-    employee = get_object_or_404(Employee, id=request.session['employee_id'])
-    
-    if request.method == 'POST':
-        form = CertificateUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            certificate = form.save(commit=False)
-            certificate.employee = employee
-            certificate.status = 'pending'
-            certificate.save()
-            messages.success(request, 'Certificate uploaded successfully')
-            return redirect('employee_portal:employee_dashboard')
-    else:
-        form = CertificateUploadForm()
-    
-    return render(request, 'employee_portal/upload_certificate.html', {'form': form})
-
-def view_certificate_status(request, certificate_id):
-    if 'employee_id' not in request.session:
-        return redirect('employee_portal:employee_login')
-    
-    employee = get_object_or_404(Employee, id=request.session['employee_id'])
-    certificate = get_object_or_404(Certificate, id=certificate_id, employee=employee)
-    
-    return render(request, 'employee_portal/certificate_status.html', {'certificate': certificate})
-
 def employee_logout(request):
     if 'employee_id' in request.session:
         del request.session['employee_id']
