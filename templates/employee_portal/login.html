@@ -3,42 +3,40 @@
 {% block title %}Employee Login{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-center align-items-center w-100" style="min-height: 100vh; background: #f7f9fb;">
-    <div class="col-12 col-sm-10 col-md-6 col-lg-5">
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white py-3">
-                <h4 class="mb-0 text-center">Employee Portal Login</h4>
-            </div>
-            <div class="card-body p-4">
-                <form method="post" class="needs-validation" novalidate>
-                    {% csrf_token %}
-                    <div class="mb-4">
-                        <label for="emp_id" class="form-label fw-bold">Employee ID</label>
-                        <input type="text" 
-                               class="form-control form-control-lg" 
-                               id="emp_id" 
-                               name="emp_id" 
-                               placeholder="Enter your employee ID"
-                               required
-                               autocomplete="off">
-                        <div class="form-text text-muted mt-2">
-                            <i class="fas fa-info-circle me-1"></i>
-                            Enter your assigned employee ID to access your profile
-                        </div>
+<div class="col-12 col-sm-10 col-md-6 col-lg-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white py-3">
+            <h4 class="mb-0 text-center">Employee Portal Login</h4>
+        </div>
+        <div class="card-body p-4">
+            <form method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="emp_id" class="form-label fw-bold">Employee ID</label>
+                    <input type="text" 
+                           class="form-control form-control-lg" 
+                           id="emp_id" 
+                           name="emp_id" 
+                           placeholder="Enter your employee ID"
+                           required
+                           autocomplete="off">
+                    <div class="form-text text-muted mt-2">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Enter your assigned employee ID to access your profile
                     </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="fas fa-sign-in-alt me-2"></i>Access Profile
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div class="card-footer bg-light py-3">
-                <p class="text-center text-muted mb-0 small">
-                    <i class="fas fa-mobile-alt me-1"></i>
-                    Mobile-friendly login
-                </p>
-            </div>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Access Profile
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer bg-light py-3">
+            <p class="text-center text-muted mb-0 small">
+                <i class="fas fa-mobile-alt me-1"></i>
+                Mobile-friendly login
+            </p>
         </div>
     </div>
 </div>
