@@ -135,13 +135,7 @@ STATICFILES_DIRS = [
 
 # Media files (User uploaded content)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# In development, serve media files locally
-if DEBUG:
-    MEDIA_URL = '/media/'
-else:
-    # In production, use the Render static site for media files
-    MEDIA_URL = 'https://employee-verification-portal-media.onrender.com/'
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

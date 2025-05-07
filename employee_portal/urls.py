@@ -24,4 +24,7 @@ urlpatterns = [
     path('admin-portal/', include('admin_portal.urls', namespace='admin_portal')),
     path('', include('employee_portal_app.urls')),
     # path('', include('admin_portal.urls')),  # Commented out to avoid namespace conflict
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+# Always serve media files (for Render production)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
