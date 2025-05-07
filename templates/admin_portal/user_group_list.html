@@ -644,13 +644,7 @@
                 selectedGroupNameComp.textContent = memberName;
                 selectedGroupId = groupId;
                 selectedMemberId = memberId;
-                // Update form action to include member id if selected
-                addCompetencyForm.action = `/user-groups/${groupId}/members/${memberId}/add-competency/`;
-                // Reset the form field
-                addCompetencyForm.reset();
-                // Open the Add Competency modal
-                const addCompetencyModal = new bootstrap.Modal(document.getElementById('addCompetencyModal'));
-                addCompetencyModal.show();
+                // Do NOT open the modal here!
                 // Update My Performance competence details
                 if (performanceCompetenceList) {
                     performanceCompetenceList.innerHTML = '';
@@ -666,6 +660,20 @@
                     }
                 }
             });
+        });
+
+        // Add click event listener to Add Competency button
+        addCompetencyBtn.addEventListener('click', function() {
+            if (selectedGroupId && selectedMemberId) {
+                // Set form action and reset form
+                addCompetencyForm.action = `/user-groups/${selectedGroupId}/members/${selectedMemberId}/add-competency/`;
+                addCompetencyForm.reset();
+                // Open the Add Competency modal
+                const addCompetencyModal = new bootstrap.Modal(document.getElementById('addCompetencyModal'));
+                addCompetencyModal.show();
+            } else {
+                alert('Please select a member first.');
+            }
         });
 
         // Handle member form submission
