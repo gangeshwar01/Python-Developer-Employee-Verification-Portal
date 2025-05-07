@@ -127,6 +127,13 @@
     </style>
 </head>
 <body>
+    <!-- Logout button at top right -->
+    <form action="{% url 'employee_portal:employee_logout' %}" method="post" style="position: fixed; top: 1.5rem; right: 2rem; z-index: 1100;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger btn-sm d-flex align-items-center" style="gap: 0.5rem;">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </form>
     {% block content_wrapper %}
         <div class="sidebar">
             <div class="sidebar-header">
@@ -137,14 +144,6 @@
                     <a class="nav-link" href="{% url 'employee_portal:employee_dashboard' %}">
                         <i class="fas fa-home"></i> Dashboard
                     </a>
-                </li>
-                <li class="nav-item">
-                    <form action="{% url 'employee_portal:employee_logout' %}" method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="nav-link btn btn-link">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </button>
-                    </form>
                 </li>
             </ul>
         </div>
