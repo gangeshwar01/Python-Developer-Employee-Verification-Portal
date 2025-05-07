@@ -127,24 +127,21 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-# Media files
-MEDIA_URL = 'https://employee-verification-portal-media.onrender.com/'
+# Media files (User uploaded content)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Add this to ensure media files are served correctly
-if not DEBUG:
+# In development, serve media files locally
+if DEBUG:
+    MEDIA_URL = '/media/'
+else:
+    # In production, use the Render static site for media files
     MEDIA_URL = 'https://employee-verification-portal-media.onrender.com/'
-    # Ensure the media URL doesn't have a trailing slash
-    if MEDIA_URL.endswith('/'):
-        MEDIA_URL = MEDIA_URL[:-1]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
