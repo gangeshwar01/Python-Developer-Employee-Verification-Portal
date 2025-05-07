@@ -3,6 +3,7 @@ from .models import Employee, Task, Certificate
 
 class EmployeeForm(forms.ModelForm):
     password = forms.CharField(label='Password', widget=forms.PasswordInput, required=False, help_text='Set or change the password.')
+    profile_image = forms.FileField(required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Employee

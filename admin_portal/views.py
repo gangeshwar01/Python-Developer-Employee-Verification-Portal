@@ -82,6 +82,8 @@ def employee_add(request):
         form = EmployeeForm(request.POST, request.FILES)
         if form.is_valid():
             employee = form.save(commit=False)
+            if 'profile_image' in request.FILES:
+                employee.profile_image = request.FILES['profile_image']
             password = form.cleaned_data.get('password')
             if password:
                 employee.set_password(password)
@@ -106,11 +108,14 @@ def employee_edit(request, pk):
         form = EmployeeForm(request.POST, request.FILES, instance=employee)
         if form.is_valid():
             employee = form.save(commit=False)
+            if 'profile_image' in request.FILES:
+                employee.profile_image = request.FILES['profile_image']
             password = form.cleaned_data.get('password')
             if password:
                 employee.set_password(password)
             employee.save()
             form.save_m2m()
+            messages.success(request, 'Employee updated successfully.')
             return redirect('admin_portal:employee_detail', pk=pk)
     else:
         form = EmployeeForm(instance=employee)
