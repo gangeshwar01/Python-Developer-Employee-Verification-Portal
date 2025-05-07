@@ -24,12 +24,15 @@
                                 <button type="button" class="btn btn-dark btn-sm float-end" id="addMemberBtn" disabled>
                                     Add Member
                                 </button>
+                                <button type="button" class="btn btn-danger btn-sm float-end me-2" id="deleteMemberBtn" disabled>
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for department in departments %}
-                        <tr data-department-id="{{ department.id }}">
+                        <tr data-department-id="{{ department.id }}" data-members='[{% for member in department.members.all %}{"id":{{ member.id }},"name":"{{ member.name|escapejs }}"}{% if not forloop.last %},{% endif %}{% endfor %}]'>
                             <td class="py-3">{{ forloop.counter }}</td>
                             <td class="py-3">
                                 <a href="javascript:void(0)" class="department-name" data-department-id="{{ department.id }}">{{ department.name }}</a>
@@ -122,14 +125,41 @@
     </div>
 </div>
 
+<!-- Delete Member Modal -->
+<div class="modal fade" id="deleteMemberModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Member(s) from <span id="deleteDepartmentName"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="" id="deleteMemberForm">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div id="deleteMemberList"></div>
+                </div>
+                <div class="modal-footer border-0 justify-content-center gap-2">
+                    <button type="submit" class="btn btn-danger px-4">Delete Selected</button>
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     let selectedDepartmentId = null;
     const addMemberBtn = document.getElementById('addMemberBtn');
+    const deleteMemberBtn = document.getElementById('deleteMemberBtn');
     const addMemberForm = document.getElementById('addMemberForm');
     const selectedDepartmentName = document.getElementById('selectedDepartmentName');
+    const deleteDepartmentName = document.getElementById('deleteDepartmentName');
+    const deleteMemberForm = document.getElementById('deleteMemberForm');
+    const deleteMemberList = document.getElementById('deleteMemberList');
 
     if (addMemberBtn) addMemberBtn.disabled = true;
+    if (deleteMemberBtn) deleteMemberBtn.disabled = true;
 
     document.querySelectorAll('.department-name').forEach(function(deptName) {
         deptName.addEventListener('click', function(e) {
@@ -139,9 +169,12 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('tr[data-department-id]').forEach(tr => tr.classList.remove('selected-group'));
             this.closest('tr').classList.add('selected-group');
             if (addMemberBtn) addMemberBtn.disabled = false;
+            if (deleteMemberBtn) deleteMemberBtn.disabled = false;
             selectedDepartmentId = departmentId;
             selectedDepartmentName.textContent = departmentName;
+            deleteDepartmentName.textContent = departmentName;
             addMemberForm.action = `/admin-portal/departments/${departmentId}/add-member/`;
+            deleteMemberForm.action = `/admin-portal/departments/${departmentId}/delete-members/`;
             document.getElementById('memberName').value = '';
         });
     });
@@ -157,12 +190,46 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    if (deleteMemberBtn) {
+        deleteMemberBtn.addEventListener('click', function() {
+            if (!selectedDepartmentId) {
+                alert('Please select a department first.');
+                return;
+            }
+            // Get members for the selected department
+            const row = document.querySelector(`tr[data-department-id='${selectedDepartmentId}']`);
+            const members = JSON.parse(row.getAttribute('data-members'));
+            let html = '';
+            if (members.length > 0) {
+                html += '<div class="mb-2">Select member(s) to delete:</div>';
+                html += '<div class="form-check">';
+                members.forEach(function(member) {
+                    html += `<div><input class='form-check-input' type='checkbox' name='member_ids' value='${member.id}' id='del_member_${member.id}'> <label class='form-check-label' for='del_member_${member.id}'>${member.name}</label></div>`;
+                });
+                html += '</div>';
+            } else {
+                html = '<div class="text-muted">No members in this department.</div>';
+            }
+            deleteMemberList.innerHTML = html;
+            const deleteMemberModal = new bootstrap.Modal(document.getElementById('deleteMemberModal'));
+            deleteMemberModal.show();
+        });
+    }
+
     addMemberForm.addEventListener('submit', function(e) {
         const memberName = document.getElementById('memberName').value.trim();
         const employeeId = document.getElementById('employeeSelect').value;
         if (!memberName && !employeeId) {
             e.preventDefault();
             alert('Please select an employee or enter a member name');
+        }
+    });
+
+    deleteMemberForm.addEventListener('submit', function(e) {
+        const checked = deleteMemberForm.querySelectorAll('input[name="member_ids"]:checked');
+        if (checked.length === 0) {
+            e.preventDefault();
+            alert('Please select at least one member to delete.');
         }
     });
 });

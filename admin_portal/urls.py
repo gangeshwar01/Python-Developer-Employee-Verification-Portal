@@ -27,6 +27,7 @@ urlpatterns = [
     path('departments/', views.department_list, name='department_list'),
     path('departments/add/', views.department_add, name='department_add'),
     path('departments/<int:department_id>/add-member/', views.add_department_member, name='add_department_member'),
+    path('departments/<int:department_id>/delete-members/', views.delete_department_members, name='delete_department_members'),
     
     # User Group URLs
     path('user-groups/', views.user_group_list, name='user_group_list'),

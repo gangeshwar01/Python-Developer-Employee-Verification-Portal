@@ -272,3 +272,17 @@ def add_department_member(request, department_id):
             messages.success(request, f'Member {name} added to department successfully.')
         return redirect('admin_portal:department_list')
     return render(request, 'admin_portal/add_department_member.html', {'department': department, 'employees': employees})
+
+@login_required
+def delete_department_members(request, department_id):
+    department = get_object_or_404(Department, id=department_id)
+    if request.method == 'POST':
+        member_ids = request.POST.getlist('member_ids')
+        if member_ids:
+            DepartmentMember.objects.filter(id__in=member_ids, department=department).delete()
+            messages.success(request, 'Selected member(s) deleted from department.')
+        else:
+            messages.error(request, 'No members selected for deletion.')
+        return redirect('admin_portal:department_list')
+    # For GET, redirect to department list
+    return redirect('admin_portal:department_list')
