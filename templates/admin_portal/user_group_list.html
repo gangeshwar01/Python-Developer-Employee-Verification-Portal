@@ -770,7 +770,7 @@
             e.preventDefault();
             if (!currentCompetencyName || !currentRating) return;
             // Send AJAX POST to store rating
-            fetch('/rate-competency/', {
+            fetch('/admin-portal/rate-competency/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
