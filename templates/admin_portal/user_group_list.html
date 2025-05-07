@@ -784,6 +784,21 @@
                 }
             });
         });
+
+        // Accessibility: inert background when Add Competency modal is open
+        var addCompetencyModalEl = document.getElementById('addCompetencyModal');
+        if (addCompetencyModalEl) {
+            addCompetencyModalEl.addEventListener('show.bs.modal', function () {
+                document.querySelectorAll('body > *:not(.modal):not(script)').forEach(function(el) {
+                    el.setAttribute('inert', '');
+                });
+            });
+            addCompetencyModalEl.addEventListener('hidden.bs.modal', function () {
+                document.querySelectorAll('body > *[inert]').forEach(function(el) {
+                    el.removeAttribute('inert');
+                });
+            });
+        }
     });
 
     function renderStars(rating) {
