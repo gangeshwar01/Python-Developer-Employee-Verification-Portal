@@ -7,6 +7,8 @@ from .forms import CertificateUploadForm
 from .forms import EmployeeTaskForm
 from django.views.decorators.http import require_POST
 import logging
+from .models import CertificateRequest
+from django.contrib.auth.decorators import login_required
 
 logger = logging.getLogger(__name__)
 
@@ -132,3 +134,16 @@ def update_task_status(request, task_id):
         task.save()
         messages.success(request, 'Task status updated.')
     return redirect('employee_portal:employee_dashboard')
+
+@login_required
+def certificate_request(request):
+    if request.method == 'POST':
+        cert_id = request.POST.get('certificate_id')
+        message = request.POST.get('message')
+        try:
+            cert = Certificate.objects.get(id=cert_id, employee=request.user.employee)
+            CertificateRequest.objects.create(employee=request.user.employee, certificate=cert, message=message)
+            messages.success(request, 'Certificate request sent successfully.')
+        except Certificate.DoesNotExist:
+            messages.error(request, 'Invalid certificate selected.')
+    return redirect('employee_portal:dashboard')
