@@ -666,7 +666,7 @@
         addCompetencyBtn.addEventListener('click', function() {
             if (selectedGroupId && selectedMemberId) {
                 // Set form action and reset form
-                addCompetencyForm.action = `/user-groups/${selectedGroupId}/members/${selectedMemberId}/add-competency/`;
+                addCompetencyForm.action = `/admin-portal/user-groups/${selectedGroupId}/members/${selectedMemberId}/add-competency/`;
                 addCompetencyForm.reset();
                 // Open the Add Competency modal
                 const addCompetencyModal = new bootstrap.Modal(document.getElementById('addCompetencyModal'));
