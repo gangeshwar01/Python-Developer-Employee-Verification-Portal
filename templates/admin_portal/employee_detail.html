@@ -37,6 +37,14 @@
                     <span class="badge {% if employee.is_active %}bg-success{% else %}bg-danger{% endif %} mb-3">
                         {{ employee.is_active|yesno:"Active,Inactive" }}
                     </span>
+                    <form method="post" action="{% url 'admin_portal:update_employee_status' employee.pk %}" class="d-inline">
+                        {% csrf_token %}
+                        <select name="is_active" class="form-select form-select-sm d-inline w-auto" style="width:auto;display:inline-block;">
+                            <option value="True" {% if employee.is_active %}selected{% endif %}>Active</option>
+                            <option value="False" {% if not employee.is_active %}selected{% endif %}>Inactive</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-outline-primary ms-2">Save</button>
+                    </form>
                     <div class="d-flex justify-content-center">
                         <a href="mailto:{{ employee.email }}" class="btn btn-outline-primary btn-sm me-2">
                             <i class="fas fa-envelope me-2"></i>Email

@@ -391,3 +391,11 @@ def delete_certificate_request(request, request_id):
 def view_certificate(request, cert_id):
     certificate = get_object_or_404(Certificate, id=cert_id)
     return render(request, 'admin_portal/certificate_detail.html', {'certificate': certificate})
+
+@require_POST
+def update_employee_status(request, pk):
+    employee = get_object_or_404(Employee, pk=pk)
+    is_active = request.POST.get('is_active') == 'True'
+    employee.is_active = is_active
+    employee.save()
+    return redirect('admin_portal:employee_detail', pk=pk)

@@ -16,6 +16,7 @@ urlpatterns = [
     path('employees/<int:pk>/edit/', views.employee_edit, name='employee_edit'),
     path('employees/<int:pk>/delete/', views.employee_delete, name='employee_delete'),
     path('employees/<int:employee_id>/add-certificate/', views.add_certificate, name='add_certificate'),
+    path('employees/<int:pk>/update-status/', views.update_employee_status, name='update_employee_status'),
     
     # Task URLs
     path('tasks/add/', views.task_add, name='task_add'),
