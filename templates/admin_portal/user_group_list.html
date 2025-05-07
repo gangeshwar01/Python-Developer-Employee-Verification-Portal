@@ -797,16 +797,12 @@
         var addCompetencyModalEl = document.getElementById('addCompetencyModal');
         if (addCompetencyModalEl) {
             addCompetencyModalEl.addEventListener('show.bs.modal', function () {
-                document.querySelectorAll('body > *').forEach(function(el) {
-                    if (!addCompetencyModalEl.contains(el) && el !== addCompetencyModalEl) {
-                        el.setAttribute('inert', '');
-                    }
-                });
+                var mainContent = document.getElementById('main-content');
+                if (mainContent) mainContent.setAttribute('inert', '');
             });
             addCompetencyModalEl.addEventListener('hidden.bs.modal', function () {
-                document.querySelectorAll('body > *[inert]').forEach(function(el) {
-                    el.removeAttribute('inert');
-                });
+                var mainContent = document.getElementById('main-content');
+                if (mainContent) mainContent.removeAttribute('inert');
             });
         }
     });
