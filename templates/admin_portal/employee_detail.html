@@ -188,9 +188,9 @@
                     <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
                 </div>
                 <div class="card-body">
-                    {% if employee.task_set.all %}
+                    {% if tasks %}
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th>Title</th>
@@ -199,10 +199,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for task in employee.task_set.all|slice:":5" %}
+                                    {% for task in tasks|slice:":5" %}
                                     <tr>
                                         <td>{{ task.title }}</td>
-                                        <td>{{ task.created_at|date:"M d, Y" }}</td>
+                                        <td>{{ task.date|date:"M d, Y" }}</td>
                                         <td>
                                             <span class="badge {% if task.status == 'Completed' %}bg-success{% elif task.status == 'In Progress' %}bg-warning{% else %}bg-secondary{% endif %}">
                                                 {{ task.status|default:"Pending" }}
@@ -213,6 +213,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        <p class="text-muted">Debug: Number of tasks = {{ tasks|length }}</p>
                     {% else %}
                         <div class="text-center py-4">
                             <i class="fas fa-tasks fa-3x text-muted mb-3"></i>
