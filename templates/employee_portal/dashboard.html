@@ -10,7 +10,7 @@
                 <div class="card-body text-center">
                     <div class="mb-3">
                         {% if employee.profile_image %}
-                            <img src="https://employee-verification-portal-media.onrender.com/{{ employee.profile_image.name }}" alt="Profile" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                            <img src="{{ employee.profile_image.url }}" alt="Profile" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
                         {% else %}
                             <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width: 100px; height: 100px;">
                                 <i class="fas fa-user fa-3x text-muted"></i>
