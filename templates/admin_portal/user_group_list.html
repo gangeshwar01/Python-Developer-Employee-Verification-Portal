@@ -646,6 +646,11 @@
                 selectedMemberId = memberId;
                 // Update form action to include member id if selected
                 addCompetencyForm.action = `/user-groups/${groupId}/members/${memberId}/add-competency/`;
+                // Reset the form field
+                addCompetencyForm.reset();
+                // Open the Add Competency modal
+                const addCompetencyModal = new bootstrap.Modal(document.getElementById('addCompetencyModal'));
+                addCompetencyModal.show();
                 // Update My Performance competence details
                 if (performanceCompetenceList) {
                     performanceCompetenceList.innerHTML = '';
