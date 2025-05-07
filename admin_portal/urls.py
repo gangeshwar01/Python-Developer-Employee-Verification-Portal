@@ -39,4 +39,9 @@ urlpatterns = [
     path('user-groups/<int:group_id>/add-competency/', views.add_competency, name='add_competency'),
     path('user-groups/<int:group_id>/members/<int:member_id>/add-competency/', views.add_member_competency, name='add_member_competency'),
     path('rate-competency/', views.rate_competency, name='rate_competency'),
+    
+    # Add new URL pattern for viewing certificate requests
+    path('certificate-requests/', views.view_certificate_requests, name='view_certificate_requests'),
+    path('certificate-requests/<int:request_id>/update-status/', views.update_certificate_request_status, name='update_certificate_request_status'),
+    path('certificate-requests/<int:request_id>/delete/', views.delete_certificate_request, name='delete_certificate_request'),
 ] 

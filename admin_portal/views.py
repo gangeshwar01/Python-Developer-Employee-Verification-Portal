@@ -12,6 +12,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.http import url_has_allowed_host_and_scheme
 import logging
+from employee_portal_app.models import CertificateRequest, Notification
 
 logger = logging.getLogger(__name__)
 
@@ -335,3 +336,52 @@ def delete_certificate(request, cert_id):
         cert.delete()
         messages.success(request, 'Certificate deleted successfully.')
     return redirect('admin_portal:employee_detail', pk=employee_id)
+
+@login_required
+def view_certificate_requests(request):
+    status_filter = request.GET.get('status', 'all')
+    requests = CertificateRequest.objects.all().order_by('-created_at')
+    
+    if status_filter != 'all':
+        requests = requests.filter(status=status_filter)
+    
+    # Count unread requests for the notification badge
+    unread_requests_count = CertificateRequest.objects.filter(status='pending').count()
+    
+    context = {
+        'requests': requests,
+        'unread_requests_count': unread_requests_count,
+    }
+    return render(request, 'admin_portal/certificate_requests.html', context)
+
+@login_required
+@require_POST
+def update_certificate_request_status(request, request_id):
+    cert_request = get_object_or_404(CertificateRequest, id=request_id)
+    status = request.POST.get('status')
+    response_message = request.POST.get('response_message')
+    
+    if status in ['pending', 'in_progress', 'completed']:
+        cert_request.status = status
+        if response_message:
+            # Create a notification for the employee
+            Notification.objects.create(
+                employee=cert_request.employee,
+                title=f"Certificate Request Update: {cert_request.certificate.title}",
+                message=response_message,
+                notification_type='certificate_request'
+            )
+        cert_request.save()
+        messages.success(request, 'Request status updated successfully.')
+    else:
+        messages.error(request, 'Invalid status selected.')
+    
+    return redirect('admin_portal:view_certificate_requests')
+
+@login_required
+@require_POST
+def delete_certificate_request(request, request_id):
+    cert_request = get_object_or_404(CertificateRequest, id=request_id)
+    cert_request.delete()
+    messages.success(request, 'Request deleted successfully.')
+    return redirect('admin_portal:view_certificate_requests')

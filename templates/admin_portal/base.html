@@ -183,6 +183,20 @@
                 Settings
             </a>
             
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'certificate_list' %}active{% endif %}" href="{% url 'admin_portal:certificate_list' %}">
+                    <i class="fas fa-certificate me-2"></i>Certificates
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'view_certificate_requests' %}active{% endif %}" href="{% url 'admin_portal:view_certificate_requests' %}">
+                    <i class="fas fa-inbox me-2"></i>Certificate Requests
+                    {% if unread_requests_count > 0 %}
+                        <span class="badge bg-danger ms-2">{{ unread_requests_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            
             <form action="{% url 'admin_portal:admin_logout' %}" method="post" style="display:inline;">
                 {% csrf_token %}
                 <button type="submit" class="nav-link" style="background:none; border:none; padding:0; width:100%; text-align:left;">
