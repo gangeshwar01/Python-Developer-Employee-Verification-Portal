@@ -111,9 +111,10 @@ def certificate_request(request):
     if request.method == 'POST':
         cert_id = request.POST.get('certificate_id')
         message = request.POST.get('message')
+        employee = get_object_or_404(Employee, id=request.session['employee_id'])
         try:
-            cert = Certificate.objects.get(id=cert_id, employee=request.user.employee)
-            CertificateRequest.objects.create(employee=request.user.employee, certificate=cert, message=message)
+            cert = Certificate.objects.get(id=cert_id, employee=employee)
+            CertificateRequest.objects.create(employee=employee, certificate=cert, message=message)
             messages.success(request, 'Certificate request sent successfully.')
         except Certificate.DoesNotExist:
             messages.error(request, 'Invalid certificate selected.')
