@@ -1,0 +1,47 @@
+{% extends 'admin_portal/base.html' %}
+
+{% block title %}Certificate Details{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="fas fa-certificate me-2"></i>Certificate Details</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Title</dt>
+                <dd class="col-sm-9">{{ certificate.title }}</dd>
+
+                <dt class="col-sm-3">Employee</dt>
+                <dd class="col-sm-9">{{ certificate.employee.name }} ({{ certificate.employee.emp_id }})</dd>
+
+                <dt class="col-sm-3">Upload Date</dt>
+                <dd class="col-sm-9">{{ certificate.upload_date|date:"M d, Y" }}</dd>
+
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9">
+                    {% if certificate.status == 'verified' %}
+                        <span class="badge bg-success">Verified</span>
+                    {% elif certificate.status == 'rejected' %}
+                        <span class="badge bg-danger">Rejected</span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    {% endif %}
+                </dd>
+
+                <dt class="col-sm-3">File</dt>
+                <dd class="col-sm-9">
+                    {% if certificate.file %}
+                        <a href="{{ certificate.file.url }}" class="btn btn-primary btn-sm" target="_blank">
+                            <i class="fas fa-download me-1"></i>Download/View
+                        </a>
+                    {% else %}
+                        <span class="text-muted">No file uploaded</span>
+                    {% endif %}
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+{% endblock %} 

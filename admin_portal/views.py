@@ -385,3 +385,8 @@ def delete_certificate_request(request, request_id):
     cert_request.delete()
     messages.success(request, 'Request deleted successfully.')
     return redirect('admin_portal:view_certificate_requests')
+
+@login_required
+def view_certificate(request, cert_id):
+    certificate = get_object_or_404(Certificate, id=cert_id)
+    return render(request, 'admin_portal/certificate_detail.html', {'certificate': certificate})

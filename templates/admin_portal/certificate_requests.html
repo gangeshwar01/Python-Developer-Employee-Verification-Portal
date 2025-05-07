@@ -51,9 +51,7 @@
                             </div>
                         </td>
                         <td>
-                            <a href="{% url 'admin_portal:view_certificate' request.certificate.id %}" class="text-decoration-none">
-                                {{ request.certificate.title }}
-                            </a>
+                            {{ request.certificate.title }}
                         </td>
                         <td>
                             <div class="text-truncate" style="max-width: 200px;" title="{{ request.message }}">

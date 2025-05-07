@@ -25,6 +25,7 @@ urlpatterns = [
     path('certificates/<int:cert_id>/verify/', views.certificate_verify, name='certificate_verify'),
     path('certificates/<int:cert_id>/edit/', views.edit_certificate, name='edit_certificate'),
     path('certificates/<int:cert_id>/delete/', views.delete_certificate, name='delete_certificate'),
+    path('certificates/<int:cert_id>/view/', views.view_certificate, name='view_certificate'),
     
     # Department URLs
     path('departments/', views.department_list, name='department_list'),
