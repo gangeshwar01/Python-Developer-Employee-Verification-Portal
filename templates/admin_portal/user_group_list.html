@@ -445,7 +445,7 @@
                         <table class="employee-table">
                             <thead>
                                 <tr>
-                                    <th style="width: 50px">No</th>
+                                    <th style="width: 50px">Select</th>
                                     <th>Name</th>
                                     <th>Employee ID</th>
                                     <th>Designation</th>
@@ -454,14 +454,18 @@
                             </thead>
                             <tbody>
                                 {% for employee in employees %}
-                                <tr {% if employee.department %}data-department-id="{{ employee.department.id }}"{% endif %}>
+                                <tr>
                                     <td>
-                                        <input type="checkbox" class="employee-checkbox" name="employee_ids" value="{{ employee.id }}" id="emp_{{ employee.id }}">
+                                        <input type="checkbox" name="employee_ids" value="{{ employee.id }}" class="employee-checkbox">
                                     </td>
                                     <td>{{ employee.name }}</td>
                                     <td>{{ employee.emp_id }}</td>
                                     <td>{{ employee.designation }}</td>
-                                    <td>{{ employee.department.name }}</td>
+                                    <td>{{ employee.department }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No employees available</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -469,7 +473,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-dark">Create</button>
+                    <button type="submit" class="btn btn-dark">Add Selected Members</button>
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form>
@@ -565,32 +569,53 @@
                 e.preventDefault();
                 const groupId = this.getAttribute('data-group-id');
                 const groupNameText = this.textContent;
+                
                 // Remove selected class from all rows
                 document.querySelectorAll('.table tr').forEach(tr => tr.classList.remove('selected-group'));
+                
                 // Add selected class to clicked row
                 this.closest('tr').classList.add('selected-group');
+                
                 // Enable action buttons
                 addMemberBtn.disabled = false;
                 addCompetencyBtn.disabled = false;
+                
                 // Update selected group ID and name
                 selectedGroupId = groupId;
                 selectedMemberId = null;
                 selectedGroupName.textContent = groupNameText;
                 selectedGroupNameComp.textContent = groupNameText;
+                
                 // Update form actions
                 addMemberForm.action = "{% url 'admin_portal:add_group_member' 0 %}".replace('0', groupId);
                 addCompetencyForm.action = "{% url 'admin_portal:add_competency' 0 %}".replace('0', groupId);
+                
                 // Reset competence column to show all group competencies
                 const compCell = document.querySelector(`.competency-list[data-group-id='${groupId}']`);
                 if (compCell) {
                     const allComps = compCell.getAttribute('data-original') || compCell.innerHTML;
                     compCell.innerHTML = allComps;
                 }
+                
                 // Reset My Performance competence details
                 if (performanceCompetenceList) {
                     performanceCompetenceList.innerHTML = '<div class="competence-card competence-empty"><h3>No member selected</h3></div>';
                 }
             });
+        });
+
+        // Add click event listener to Add Member button
+        addMemberBtn.addEventListener('click', function() {
+            if (selectedGroupId) {
+                // Reset checkboxes
+                document.querySelectorAll('.employee-checkbox').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                // Show modal
+                const addMemberModal = new bootstrap.Modal(document.getElementById('addMemberModal'));
+                addMemberModal.show();
+            }
         });
 
         // Add click event listeners to member buttons
