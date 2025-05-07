@@ -117,4 +117,4 @@ def certificate_request(request):
             messages.success(request, 'Certificate request sent successfully.')
         except Certificate.DoesNotExist:
             messages.error(request, 'Invalid certificate selected.')
-    return redirect('employee_portal:dashboard')
+    return redirect('admin_portal:admin_login')
