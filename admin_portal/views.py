@@ -79,7 +79,12 @@ def employee_add(request):
     if request.method == 'POST':
         form = EmployeeForm(request.POST, request.FILES)
         if form.is_valid():
-            employee = form.save()
+            employee = form.save(commit=False)
+            password = form.cleaned_data.get('password')
+            if password:
+                employee.set_password(password)
+            employee.save()
+            form.save_m2m()
             messages.success(request, 'Employee added successfully.')
             return redirect('admin_portal:employee_list')
         else:
@@ -98,7 +103,12 @@ def employee_edit(request, pk):
     if request.method == 'POST':
         form = EmployeeForm(request.POST, request.FILES, instance=employee)
         if form.is_valid():
-            form.save()
+            employee = form.save(commit=False)
+            password = form.cleaned_data.get('password')
+            if password:
+                employee.set_password(password)
+            employee.save()
+            form.save_m2m()
             return redirect('admin_portal:employee_detail', pk=pk)
     else:
         form = EmployeeForm(instance=employee)

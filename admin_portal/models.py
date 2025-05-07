@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.contrib.auth.hashers import make_password, check_password
 
 class Employee(models.Model):
     emp_id = models.CharField(max_length=10, unique=True)
@@ -8,14 +9,24 @@ class Employee(models.Model):
     department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True, related_name='employees')
     designation = models.CharField(max_length=50)
     join_date = models.DateField()
+    left_date = models.DateField(null=True, blank=True)
+    phone = models.CharField(max_length=20, null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
     profile_image = models.FileField(upload_to='profile_images/', null=True, blank=True)
     performance_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
     email = models.EmailField(unique=True, null=True, blank=True)
+    password_hash = models.CharField(max_length=128, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.name} ({self.emp_id})"
+
+    def set_password(self, raw_password):
+        self.password_hash = make_password(raw_password)
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password_hash)
 
 class Task(models.Model):
     STATUS_CHOICES = [

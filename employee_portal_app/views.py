@@ -13,14 +13,18 @@ logger = logging.getLogger(__name__)
 def employee_login(request):
     if request.method == 'POST':
         emp_id = request.POST.get('emp_id')
+        password = request.POST.get('password')
         try:
             employee = Employee.objects.get(emp_id=emp_id)
+            if not password or not employee.check_password(password):
+                messages.error(request, 'Invalid Employee ID or Password')
+                return render(request, 'employee_portal/login.html')
             request.session['employee_id'] = employee.id
             logger.info(f"Employee {emp_id} logged in successfully")
             return redirect('employee_portal:employee_dashboard')
         except Employee.DoesNotExist:
             logger.warning(f"Failed login attempt for employee ID: {emp_id}")
-            messages.error(request, 'Invalid Employee ID')
+            messages.error(request, 'Invalid Employee ID or Password')
         except Exception as e:
             logger.error(f"Error during employee login: {str(e)}")
             messages.error(request, 'An error occurred during login. Please try again.')
