@@ -139,6 +139,13 @@ STATICFILES_DIRS = [
 MEDIA_URL = 'https://employee-verification-portal-media.onrender.com/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Add this to ensure media files are served correctly
+if not DEBUG:
+    MEDIA_URL = 'https://employee-verification-portal-media.onrender.com/'
+    # Ensure the media URL doesn't have a trailing slash
+    if MEDIA_URL.endswith('/'):
+        MEDIA_URL = MEDIA_URL[:-1]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
