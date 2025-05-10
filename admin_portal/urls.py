@@ -44,6 +44,7 @@ urlpatterns = [
     path('user-groups/<int:group_id>/delete/', views.delete_user_group, name='delete_user_group'),
     path('user-groups/<int:group_id>/members/<int:member_id>/delete/', views.delete_group_member, name='delete_group_member'),
     path('user-groups/<int:group_id>/members/<int:member_id>/competencies/<int:competency_id>/delete/', views.delete_member_competency, name='delete_member_competency'),
+    path('user-groups/<int:group_id>/competencies/<int:competency_id>/delete/', views.delete_group_competency, name='delete_group_competency'),
     
     # Add new URL pattern for viewing certificate requests
     path('certificate-requests/', views.view_certificate_requests, name='view_certificate_requests'),

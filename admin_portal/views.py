@@ -455,3 +455,10 @@ def delete_member_competency(request, group_id, member_id, competency_id):
     member.competencies.remove(competency_id)
     messages.success(request, 'Competency removed from member.')
     return redirect('admin_portal:user_group_list')
+
+@login_required
+def delete_group_competency(request, group_id, competency_id):
+    group = get_object_or_404(UserGroup, id=group_id)
+    group.competencies.remove(competency_id)
+    messages.success(request, 'Competency removed from group.')
+    return redirect('admin_portal:user_group_list')
