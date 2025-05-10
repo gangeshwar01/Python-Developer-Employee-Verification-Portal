@@ -171,9 +171,12 @@
                 User Group
             </a>
             
-            <a href="#" class="nav-link">
+            <a href="{% url 'admin_portal:notification_list' %}" class="nav-link {% if 'notification' in request.resolver_match.url_name %}active{% endif %}">
                 <i class="fas fa-bell"></i>
                 Notifications
+                {% if unread_count > 0 %}
+                    <span class="badge bg-danger ms-2">{{ unread_count }}</span>
+                {% endif %}
             </a>
             
             <div class="nav-divider"></div>

@@ -22,6 +22,9 @@ class CertificateRequest(models.Model):
 class Notification(models.Model):
     NOTIFICATION_TYPES = [
         ('certificate_request', 'Certificate Request'),
+        ('task_created', 'Task Created'),
+        ('task_updated', 'Task Updated'),
+        ('task_completed', 'Task Completed'),
         ('general', 'General'),
     ]
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='notifications')
@@ -30,6 +33,10 @@ class Notification(models.Model):
     notification_type = models.CharField(max_length=50, choices=NOTIFICATION_TYPES, default='general')
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    related_object_id = models.PositiveIntegerField(null=True, blank=True)  # To store ID of related object (task, certificate, etc.)
 
     def __str__(self):
         return f"{self.title} for {self.employee.name}"
+
+    class Meta:
+        ordering = ['-created_at']

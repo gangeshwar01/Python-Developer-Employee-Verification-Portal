@@ -404,3 +404,19 @@ def update_employee_status(request, pk):
     employee.is_active = is_active
     employee.save()
     return redirect('admin_portal:employee_detail', pk=pk)
+
+@login_required
+def notification_list(request):
+    notifications = Notification.objects.all().order_by('-created_at')
+    unread_count = notifications.filter(is_read=False).count()
+    
+    # Mark notifications as read when viewed
+    if request.method == 'GET':
+        notifications.update(is_read=True)
+    
+    context = {
+        'notifications': notifications,
+        'unread_count': unread_count,
+        'title': 'Notifications'
+    }
+    return render(request, 'admin_portal/notification_list.html', context)

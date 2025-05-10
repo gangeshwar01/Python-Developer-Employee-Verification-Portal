@@ -7,7 +7,7 @@ from .forms import CertificateUploadForm
 from .forms import EmployeeTaskForm
 from django.views.decorators.http import require_POST
 import logging
-from .models import CertificateRequest
+from .models import CertificateRequest, Notification
 from django.contrib.auth.decorators import login_required
 
 logger = logging.getLogger(__name__)
@@ -35,8 +35,8 @@ def employee_login(request):
 def employee_dashboard(request):
     if 'employee_id' not in request.session:
         return redirect('employee_portal:employee_login')
-    
     employee = get_object_or_404(Employee, id=request.session['employee_id'])
+    logging.warning(f"[EMPLOYEE PORTAL] Dashboard employee.id: {employee.id}, emp_id: {employee.emp_id}")
     tasks = Task.objects.filter(employee=employee).order_by('-date')
     certificates = Certificate.objects.filter(employee=employee).order_by('-upload_date')
     
@@ -118,4 +118,69 @@ def certificate_request(request):
             messages.success(request, 'Certificate request sent successfully.')
         except Certificate.DoesNotExist:
             messages.error(request, 'Invalid certificate selected.')
+    return redirect('employee_portal:employee_dashboard')
+
+@login_required
+def create_task(request):
+    if request.method == 'POST':
+        form = EmployeeTaskForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.employee = request.user.employee
+            task.save()
+            
+            # Create notification for admin
+            Notification.objects.create(
+                employee=request.user.employee,
+                title="New Task Created",
+                message=f"Task '{task.title}' has been created",
+                notification_type='task_created',
+                related_object_id=task.id
+            )
+            
+            messages.success(request, 'Task created successfully!')
+            return redirect('employee_portal:employee_dashboard')
+    else:
+        form = EmployeeTaskForm()
+    return render(request, 'employee_portal/create_task.html', {'form': form})
+
+@login_required
+def update_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id, employee=request.user.employee)
+    if request.method == 'POST':
+        form = EmployeeTaskForm(request.POST, instance=task)
+        if form.is_valid():
+            task = form.save()
+            
+            # Create notification for admin
+            Notification.objects.create(
+                employee=request.user.employee,
+                title="Task Updated",
+                message=f"Task '{task.title}' has been updated",
+                notification_type='task_updated',
+                related_object_id=task.id
+            )
+            
+            messages.success(request, 'Task updated successfully!')
+            return redirect('employee_portal:employee_dashboard')
+    else:
+        form = EmployeeTaskForm(instance=task)
+    return render(request, 'employee_portal/update_task.html', {'form': form})
+
+@login_required
+def complete_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id, employee=request.user.employee)
+    task.status = 'completed'
+    task.save()
+    
+    # Create notification for admin
+    Notification.objects.create(
+        employee=request.user.employee,
+        title="Task Completed",
+        message=f"Task '{task.title}' has been marked as completed",
+        notification_type='task_completed',
+        related_object_id=task.id
+    )
+    
+    messages.success(request, 'Task marked as completed!')
     return redirect('employee_portal:employee_dashboard')

@@ -44,6 +44,7 @@ urlpatterns = [
     
     # Add new URL pattern for viewing certificate requests
     path('certificate-requests/', views.view_certificate_requests, name='view_certificate_requests'),
-    path('certificate-requests/<int:request_id>/update-status/', views.update_certificate_request_status, name='update_certificate_request_status'),
+    path('certificate-requests/<int:request_id>/update/', views.update_certificate_request_status, name='update_certificate_request_status'),
     path('certificate-requests/<int:request_id>/delete/', views.delete_certificate_request, name='delete_certificate_request'),
+    path('notifications/', views.notification_list, name='notification_list'),
 ] 
