@@ -420,3 +420,17 @@ def notification_list(request):
         'title': 'Notifications'
     }
     return render(request, 'admin_portal/notification_list.html', context)
+
+@login_required
+@require_POST
+def clear_all_notifications(request):
+    Notification.objects.all().delete()
+    messages.success(request, 'All notifications cleared.')
+    return redirect('admin_portal:notification_list')
+
+@login_required
+@require_POST
+def delete_notification(request, notification_id):
+    Notification.objects.filter(id=notification_id).delete()
+    messages.success(request, 'Notification removed.')
+    return redirect('admin_portal:notification_list')

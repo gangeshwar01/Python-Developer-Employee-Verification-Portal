@@ -47,4 +47,6 @@ urlpatterns = [
     path('certificate-requests/<int:request_id>/update/', views.update_certificate_request_status, name='update_certificate_request_status'),
     path('certificate-requests/<int:request_id>/delete/', views.delete_certificate_request, name='delete_certificate_request'),
     path('notifications/', views.notification_list, name='notification_list'),
+    path('notifications/clear/', views.clear_all_notifications, name='clear_all_notifications'),
+    path('notifications/<int:notification_id>/delete/', views.delete_notification, name='delete_notification'),
 ] 
