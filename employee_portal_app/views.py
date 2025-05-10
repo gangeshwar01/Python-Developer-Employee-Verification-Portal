@@ -62,6 +62,14 @@ def add_task(request):
             task = form.save(commit=False)
             task.employee = employee
             task.save()
+            # Create notification for admin
+            Notification.objects.create(
+                employee=employee,
+                title="New Task Created",
+                message=f"Task '{task.title}' has been created",
+                notification_type='task_created',
+                related_object_id=task.id
+            )
             messages.success(request, 'Task added successfully.')
             return redirect('employee_portal:employee_dashboard')
     else:
@@ -77,6 +85,14 @@ def edit_task(request, task_id):
         form = EmployeeTaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
+            # Create notification for admin
+            Notification.objects.create(
+                employee=employee,
+                title="Task Updated",
+                message=f"Task '{task.title}' has been updated",
+                notification_type='task_updated',
+                related_object_id=task.id
+            )
             messages.success(request, 'Task updated successfully.')
             return redirect('employee_portal:employee_dashboard')
     else:
