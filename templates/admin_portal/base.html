@@ -89,6 +89,7 @@
             display: flex;
             align-items: center;
             transition: all 0.3s ease;
+            position: relative;
         }
 
         .nav-link:hover, .nav-link.active {
@@ -106,6 +107,17 @@
             height: 1px;
             background-color: rgba(0,0,0,.1);
             margin: 1rem 0;
+        }
+
+        .nav-link .badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            font-size: 0.7rem;
+            padding: 0.25em 0.6em;
+            border-radius: 50%;
+            transform: translate(50%, -50%);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         @media (max-width: 768px) {
@@ -175,7 +187,7 @@
                 <i class="fas fa-bell"></i>
                 Notifications
                 {% if unread_count > 0 %}
-                    <span class="badge bg-danger ms-2">{{ unread_count }}</span>
+                    <span class="badge bg-danger rounded-pill position-absolute" style="top: 0.5rem; right: 0.5rem; font-size: 0.7rem;">{{ unread_count }}</span>
                 {% endif %}
             </a>
             
