@@ -119,6 +119,14 @@ def update_task_status(request, task_id):
     if status in dict(Task.STATUS_CHOICES):
         task.status = status
         task.save()
+        # Create notification for admin
+        Notification.objects.create(
+            employee=employee,
+            title="Task Status Updated",
+            message=f"Task '{task.title}' status changed to '{task.get_status_display()}'",
+            notification_type='task_updated',
+            related_object_id=task.id
+        )
         messages.success(request, 'Task status updated.')
     return redirect('employee_portal:employee_dashboard')
 
@@ -131,6 +139,14 @@ def certificate_request(request):
         try:
             cert = Certificate.objects.get(id=cert_id, employee=employee)
             CertificateRequest.objects.create(employee=employee, certificate=cert, message=message)
+            # Create notification for admin
+            Notification.objects.create(
+                employee=employee,
+                title="Certificate/Message Request",
+                message=f"{employee.name} sent a certificate/message request: {message}",
+                notification_type='certificate_request',
+                related_object_id=cert.id
+            )
             messages.success(request, 'Certificate request sent successfully.')
         except Certificate.DoesNotExist:
             messages.error(request, 'Invalid certificate selected.')
