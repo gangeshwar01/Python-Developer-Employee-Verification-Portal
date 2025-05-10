@@ -342,6 +342,12 @@
                                     <td rowspan="{{ group.members.count }}">{{ forloop.parentloop.counter }}</td>
                                     <td rowspan="{{ group.members.count }}">
                         <a href="javascript:void(0)" class="group-name" data-group-id="{{ group.id }}">{{ group.name }}</a>
+                        <form method="post" action="{% url 'admin_portal:delete_user_group' group.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link text-danger btn-sm" title="Delete Group" onclick="return confirm('Delete this user group?');">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
                     </td>
                                 {% endif %}
                                 <td>
@@ -351,16 +357,29 @@
                                         data-member-name="{{ member.name|escapejs }}"
                                         data-competencies='[{% for c in member.competencies.all %}{"name": "{{ c.name|escapejs }}"}{% if not forloop.last %},{% endif %}{% endfor %}]'>
                                         {{ member.name }}
+                                        <form method="post" action="{% url 'admin_portal:delete_group_member' group.id member.id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-link text-danger btn-sm" title="Remove Member" onclick="return confirm('Remove this member from group?');">
+                                                <i class="fas fa-user-minus"></i>
+                                            </button>
+                                        </form>
                                     </button>
                                 </td>
                                 {% if forloop.first %}
                                     <td class="competency-list" data-group-id="{{ group.id }}" rowspan="{{ group.members.count }}">
-                                        {% for competency in group.competencies.all %}
-                                            {{ competency.name }}<br>
-    {% empty %}
+                                        {% for competency in member.competencies.all %}
+                                            {{ competency.name }}
+                                            <form method="post" action="{% url 'admin_portal:delete_member_competency' group.id member.id competency.id %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-link text-danger btn-sm" title="Remove Competency" onclick="return confirm('Remove this competency from member?');">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </form>
+                                            <br>
+                                        {% empty %}
                                             No competencies
-    {% endfor %}
-</td>
+                                        {% endfor %}
+                                    </td>
                                 {% endif %}
                             </tr>
                         {% endfor %}
@@ -371,7 +390,14 @@
                             <td>No members</td>
                             <td class="competency-list" data-group-id="{{ group.id }}">
     {% for competency in group.competencies.all %}
-        {{ competency.name }}<br>
+        {{ competency.name }}
+        <form method="post" action="{% url 'admin_portal:delete_group_competency' group.id competency.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link text-danger btn-sm" title="Remove Competency" onclick="return confirm('Remove this competency from group?');">
+                <i class="fas fa-times"></i>
+            </button>
+        </form>
+        <br>
     {% empty %}
         No competencies
     {% endfor %}

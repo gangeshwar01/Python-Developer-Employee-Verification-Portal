@@ -434,3 +434,24 @@ def delete_notification(request, notification_id):
     Notification.objects.filter(id=notification_id).delete()
     messages.success(request, 'Notification removed.')
     return redirect('admin_portal:notification_list')
+
+@login_required
+def delete_user_group(request, group_id):
+    group = get_object_or_404(UserGroup, id=group_id)
+    group.delete()
+    messages.success(request, 'User group deleted successfully.')
+    return redirect('admin_portal:user_group_list')
+
+@login_required
+def delete_group_member(request, group_id, member_id):
+    member = get_object_or_404(GroupMember, id=member_id, group_id=group_id)
+    member.delete()
+    messages.success(request, 'Member removed from group.')
+    return redirect('admin_portal:user_group_list')
+
+@login_required
+def delete_member_competency(request, group_id, member_id, competency_id):
+    member = get_object_or_404(GroupMember, id=member_id, group_id=group_id)
+    member.competencies.remove(competency_id)
+    messages.success(request, 'Competency removed from member.')
+    return redirect('admin_portal:user_group_list')
