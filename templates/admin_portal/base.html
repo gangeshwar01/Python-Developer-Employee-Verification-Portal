@@ -300,6 +300,37 @@
             margin-top: 1.5rem !important;
             margin-bottom: 0.5rem !important;
         }
+
+        /* Sidebar submenu styles */
+        .sidebar-dropdown {
+            position: relative;
+        }
+        .sidebar-dropdown > .nav-link:after {
+            content: '\25B6';
+            float: right;
+            margin-left: 8px;
+            font-size: 0.8em;
+            transition: transform 0.2s;
+        }
+        .sidebar-dropdown:hover > .nav-link:after {
+            transform: rotate(90deg);
+        }
+        .sidebar-submenu {
+            display: none;
+            flex-direction: column;
+            background: var(--sidebar-bg);
+            margin-left: 1.5rem;
+            border-left: 2px solid var(--custom-theme-color);
+            padding-left: 0.5rem;
+        }
+        .sidebar-dropdown:hover .sidebar-submenu {
+            display: flex;
+        }
+        .sidebar-submenu .nav-link {
+            font-size: 0.97em;
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.2rem;
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
@@ -346,15 +377,15 @@
                 <i class="fas fa-cog"></i>
                 Settings
             </a>
-            <a class="nav-link {% if request.resolver_match.url_name == 'certificate_list' %}active{% endif %}" href="{% url 'admin_portal:certificate_list' %}">
-                <i class="fas fa-certificate me-2"></i>Certificates
-            </a>
-            <a class="nav-link {% if request.resolver_match.url_name == 'view_certificate_requests' %}active{% endif %}" href="{% url 'admin_portal:view_certificate_requests' %}">
-                <i class="fas fa-inbox me-2"></i>Certificate Requests
-                {% if unread_requests_count > 0 %}
-                    <span class="badge bg-danger ms-2">{{ unread_requests_count }}</span>
-                {% endif %}
-            </a>
+            <div class="sidebar-dropdown">
+                <a href="{% url 'admin_portal:certificate_list' %}" class="nav-link {% if request.resolver_match.url_name == 'certificate_list' or request.resolver_match.url_name == 'view_certificate_requests' %}active{% endif %}">
+                    <i class="fas fa-certificate me-2"></i>Certificates
+                </a>
+                <div class="sidebar-submenu">
+                    <a href="{% url 'admin_portal:certificate_list' %}" class="nav-link {% if request.resolver_match.url_name == 'certificate_list' %}active{% endif %}">Certificates</a>
+                    <a href="{% url 'admin_portal:view_certificate_requests' %}" class="nav-link {% if request.resolver_match.url_name == 'view_certificate_requests' %}active{% endif %}">Certificate Requests {% if unread_requests_count > 0 %}<span class="badge bg-danger ms-2">{{ unread_requests_count }}</span>{% endif %}</a>
+                </div>
+            </div>
         </div>
         <div style="padding: 1.5rem 0 1.5rem 0;">
             <form action="{% url 'admin_portal:admin_logout' %}" method="post" style="display:inline;">
