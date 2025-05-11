@@ -470,6 +470,7 @@ def site_settings(request):
     settings_obj, _ = SiteSettings.objects.get_or_create(pk=1)
     user = request.user
     username_error = None
+    new_username = user.username
     if request.method == 'POST':
         settings_form = SiteSettingsForm(request.POST, request.FILES, instance=settings_obj)
         password_form = PasswordChangeForm(user, request.POST)
@@ -484,10 +485,11 @@ def site_settings(request):
                     user.username = new_username
                     user.save()
                     messages.success(request, 'Username updated successfully.')
-            settings_form.save()
             if not username_error:
+                settings_form.save()
                 messages.success(request, 'Settings updated successfully.')
-            return redirect('admin_portal:site_settings')
+                return redirect('admin_portal:site_settings')
+            # If there is a username error, fall through to re-render the page with the error
         elif 'change_password' in request.POST and password_form.is_valid():
             user = password_form.save()
             update_session_auth_hash(request, user)
@@ -501,5 +503,5 @@ def site_settings(request):
         'password_form': password_form,
         'settings_obj': settings_obj,
         'username_error': username_error,
-        'current_username': user.username,
+        'current_username': new_username,
     })
