@@ -239,22 +239,27 @@ document.addEventListener('DOMContentLoaded', function() {
 /* Table styling */
 .table th {
     font-weight: 600;
-    color: #495057;
+    color: var(--main-text);
     border-bottom-width: 1px;
+    background: var(--main-bg);
 }
 
 .table td {
     vertical-align: middle;
+    color: var(--main-text);
+    background: var(--main-bg);
 }
 
 /* Card styling */
 .card {
     border: none;
     border-radius: 0.5rem;
+    background: var(--main-bg);
+    color: var(--main-text);
 }
 
 .bg-light {
-    background-color: #f8f9fa !important;
+    background-color: var(--sidebar-hover) !important;
 }
 
 /* Button styling */
@@ -272,6 +277,8 @@ document.addEventListener('DOMContentLoaded', function() {
 .modal-content {
     border: none;
     border-radius: 0.5rem;
+    background: var(--main-bg);
+    color: var(--main-text);
 }
 
 .modal-header {
@@ -288,17 +295,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .modal-title {
     font-size: 1.25rem;
+    color: var(--main-text);
 }
 
 .form-label {
     font-size: 0.875rem;
-    color: #6c757d;
+    color: var(--text-muted);
 }
 
 .form-control {
     border-radius: 0.25rem;
     padding: 0.5rem 0.75rem;
     border: 1px solid #dee2e6;
+    background: var(--main-bg);
+    color: var(--main-text);
 }
 
 .form-control:focus {

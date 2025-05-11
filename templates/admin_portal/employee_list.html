@@ -170,12 +170,15 @@
 /* Table styling */
 .table th {
     font-weight: 600;
-    color: #495057;
+    color: var(--main-text);
     border-bottom-width: 1px;
+    background: var(--main-bg);
 }
 
 .table td {
     vertical-align: middle;
+    color: var(--main-text);
+    background: var(--main-bg);
 }
 
 .btn-group .btn {
@@ -187,10 +190,12 @@
 .card {
     border: none;
     border-radius: 0.5rem;
+    background: var(--main-bg);
+    color: var(--main-text);
 }
 
 .bg-light {
-    background-color: #f8f9fa !important;
+    background-color: var(--sidebar-hover) !important;
 }
 
 /* Profile Upload Circle */
@@ -198,7 +203,7 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background-color: #f8f9fa;
+    background-color: var(--sidebar-hover);
     position: relative;
     border: 2px dashed #dee2e6;
     cursor: pointer;
@@ -223,12 +228,12 @@
 
 .profile-upload-label i {
     font-size: 24px;
-    color: #6c757d;
+    color: var(--text-muted);
 }
 
 /* Employee Fields Section */
 .employee-fields {
-    background-color: #f8f9fa;
+    background-color: var(--sidebar-hover);
     border-radius: 8px;
 }
 
@@ -237,6 +242,8 @@
     border: 1px solid #dee2e6;
     padding: 0.75rem;
     border-radius: 6px;
+    background: var(--main-bg);
+    color: var(--main-text);
 }
 
 .form-control:focus, .form-select:focus {
@@ -248,6 +255,8 @@
 .modal-content {
     border: none;
     border-radius: 12px;
+    background: var(--main-bg);
+    color: var(--main-text);
 }
 
 .modal-dialog {
@@ -270,8 +279,8 @@
 }
 
 .btn-light {
-    background-color: #f8f9fa;
-    border-color: #f8f9fa;
+    background-color: var(--sidebar-hover);
+    border-color: var(--sidebar-hover);
 }
 
 /* Form validation styles */
