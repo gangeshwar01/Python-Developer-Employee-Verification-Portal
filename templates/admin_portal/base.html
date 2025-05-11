@@ -18,6 +18,11 @@
             --sidebar-bg: #f8f9fa;
             --sidebar-hover: #e9ecef;
             --text-muted: #6c757d;
+            {% if settings_obj and settings_obj.custom_theme_color %}
+            --custom-theme-color: {{ settings_obj.custom_theme_color }};
+            {% else %}
+            --custom-theme-color: #000000;
+            {% endif %}
         }
 
         body {
@@ -71,7 +76,7 @@
             margin-bottom: 2rem;
             text-align: center;
             border-bottom: 1px solid rgba(0,0,0,.1);
-            background: #222;
+            background: var(--custom-theme-color);
             border-radius: 12px;
         }
 
@@ -94,7 +99,7 @@
 
         .nav-link:hover, .nav-link.active {
             background-color: var(--sidebar-hover);
-            color: #000;
+            color: var(--custom-theme-color);
         }
 
         .nav-link i {

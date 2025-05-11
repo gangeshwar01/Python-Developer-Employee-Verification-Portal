@@ -117,6 +117,7 @@ class DepartmentMember(models.Model):
 class SiteSettings(models.Model):
     logo = models.ImageField(upload_to='site_logo/', null=True, blank=True)
     theme = models.CharField(max_length=20, default='light')
+    custom_theme_color = models.CharField(max_length=7, default='#000000', help_text='Custom theme color in hex format (e.g., #000000)')
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):

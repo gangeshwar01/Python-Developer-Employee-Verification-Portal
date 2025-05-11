@@ -51,7 +51,8 @@ class CertificateForm(forms.ModelForm):
 class SiteSettingsForm(forms.ModelForm):
     class Meta:
         model = SiteSettings
-        fields = ['logo', 'theme']
+        fields = ['logo', 'theme', 'custom_theme_color']
         widgets = {
-            'theme': forms.Select(choices=[('light', 'Light'), ('dark', 'Dark')])
+            'theme': forms.Select(choices=[('light', 'Light'), ('dark', 'Dark')]),
+            'custom_theme_color': forms.TextInput(attrs={'type': 'color'})
         } 
