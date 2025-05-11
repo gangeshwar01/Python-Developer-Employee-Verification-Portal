@@ -475,26 +475,25 @@ def site_settings(request):
         settings_form = SiteSettingsForm(request.POST, request.FILES, instance=settings_obj)
         password_form = PasswordChangeForm(user, request.POST)
         new_username = request.POST.get('username', '').strip()
-        if 'save_settings' in request.POST and settings_form.is_valid():
-            # Handle username change
-            if new_username and new_username != user.username:
-                from django.contrib.auth.models import User
-                if User.objects.filter(username=new_username).exclude(pk=user.pk).exists():
-                    username_error = 'This username is already taken.'
-                else:
-                    user.username = new_username
-                    user.save()
-                    messages.success(request, 'Username updated successfully.')
-            if not username_error:
-                settings_form.save()
-                messages.success(request, 'Settings updated successfully.')
-                return redirect('admin_portal:site_settings')
-            # If there is a username error, fall through to re-render the page with the error
-        elif 'change_password' in request.POST and password_form.is_valid():
+        # Always try to update username if it changed
+        if new_username and new_username != user.username:
+            from django.contrib.auth.models import User
+            if User.objects.filter(username=new_username).exclude(pk=user.pk).exists():
+                username_error = 'This username is already taken.'
+            else:
+                user.username = new_username
+                user.save()
+                messages.success(request, 'Username updated successfully.')
+        if 'save_settings' in request.POST and settings_form.is_valid() and not username_error:
+            settings_form.save()
+            messages.success(request, 'Settings updated successfully.')
+            return redirect('admin_portal:site_settings')
+        elif 'change_password' in request.POST and password_form.is_valid() and not username_error:
             user = password_form.save()
             update_session_auth_hash(request, user)
             messages.success(request, 'Password updated successfully.')
             return redirect('admin_portal:site_settings')
+        # If there is a username error, fall through to re-render the page with the error
     else:
         settings_form = SiteSettingsForm(instance=settings_obj)
         password_form = PasswordChangeForm(user)
