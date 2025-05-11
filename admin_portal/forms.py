@@ -1,5 +1,5 @@
 from django import forms
-from .models import Employee, Task, Certificate
+from .models import Employee, Task, Certificate, SiteSettings
 
 class EmployeeForm(forms.ModelForm):
     password = forms.CharField(label='Password', widget=forms.PasswordInput, required=False, help_text='Set or change the password.')
@@ -46,4 +46,12 @@ class CertificateForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'file': forms.FileInput(attrs={'class': 'form-control'})
+        }
+
+class SiteSettingsForm(forms.ModelForm):
+    class Meta:
+        model = SiteSettings
+        fields = ['logo', 'theme']
+        widgets = {
+            'theme': forms.Select(choices=[('light', 'Light'), ('dark', 'Dark')])
         } 

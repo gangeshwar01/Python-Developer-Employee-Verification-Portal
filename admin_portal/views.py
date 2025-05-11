@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.utils import timezone
-from .models import Employee, Task, Certificate, Department, UserGroup, GroupMember, Competency, DepartmentMember
-from .forms import EmployeeForm, TaskForm, CertificateVerificationForm, CertificateForm
+from .models import Employee, Task, Certificate, Department, UserGroup, GroupMember, Competency, DepartmentMember, SiteSettings
+from .forms import EmployeeForm, TaskForm, CertificateVerificationForm, CertificateForm, SiteSettingsForm
 from django.http import HttpResponse, JsonResponse
 from django.views import View
 from django.urls import reverse_lazy
@@ -13,6 +13,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.http import url_has_allowed_host_and_scheme
 import logging
 from employee_portal_app.models import CertificateRequest, Notification
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 logger = logging.getLogger(__name__)
 
@@ -462,3 +464,27 @@ def delete_group_competency(request, group_id, competency_id):
     group.competencies.remove(competency_id)
     messages.success(request, 'Competency removed from group.')
     return redirect('admin_portal:user_group_list')
+
+@login_required
+def site_settings(request):
+    settings_obj, _ = SiteSettings.objects.get_or_create(pk=1)
+    if request.method == 'POST':
+        settings_form = SiteSettingsForm(request.POST, request.FILES, instance=settings_obj)
+        password_form = PasswordChangeForm(request.user, request.POST)
+        if 'save_settings' in request.POST and settings_form.is_valid():
+            settings_form.save()
+            messages.success(request, 'Settings updated successfully.')
+            return redirect('admin_portal:site_settings')
+        elif 'change_password' in request.POST and password_form.is_valid():
+            user = password_form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Password updated successfully.')
+            return redirect('admin_portal:site_settings')
+    else:
+        settings_form = SiteSettingsForm(instance=settings_obj)
+        password_form = PasswordChangeForm(request.user)
+    return render(request, 'admin_portal/site_settings.html', {
+        'settings_form': settings_form,
+        'password_form': password_form,
+        'settings_obj': settings_obj,
+    })
