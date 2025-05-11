@@ -468,12 +468,25 @@ def delete_group_competency(request, group_id, competency_id):
 @login_required
 def site_settings(request):
     settings_obj, _ = SiteSettings.objects.get_or_create(pk=1)
+    user = request.user
+    username_error = None
     if request.method == 'POST':
         settings_form = SiteSettingsForm(request.POST, request.FILES, instance=settings_obj)
-        password_form = PasswordChangeForm(request.user, request.POST)
+        password_form = PasswordChangeForm(user, request.POST)
+        new_username = request.POST.get('username', '').strip()
         if 'save_settings' in request.POST and settings_form.is_valid():
+            # Handle username change
+            if new_username and new_username != user.username:
+                from django.contrib.auth.models import User
+                if User.objects.filter(username=new_username).exclude(pk=user.pk).exists():
+                    username_error = 'This username is already taken.'
+                else:
+                    user.username = new_username
+                    user.save()
+                    messages.success(request, 'Username updated successfully.')
             settings_form.save()
-            messages.success(request, 'Settings updated successfully.')
+            if not username_error:
+                messages.success(request, 'Settings updated successfully.')
             return redirect('admin_portal:site_settings')
         elif 'change_password' in request.POST and password_form.is_valid():
             user = password_form.save()
@@ -482,9 +495,11 @@ def site_settings(request):
             return redirect('admin_portal:site_settings')
     else:
         settings_form = SiteSettingsForm(instance=settings_obj)
-        password_form = PasswordChangeForm(request.user)
+        password_form = PasswordChangeForm(user)
     return render(request, 'admin_portal/site_settings.html', {
         'settings_form': settings_form,
         'password_form': password_form,
         'settings_obj': settings_obj,
+        'username_error': username_error,
+        'current_username': user.username,
     })
