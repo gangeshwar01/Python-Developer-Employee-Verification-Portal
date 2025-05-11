@@ -295,6 +295,11 @@
                 margin-left: 0;
             }
         }
+
+        .logout-btn {
+            margin-top: 1.5rem !important;
+            margin-bottom: 0.5rem !important;
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
@@ -365,7 +370,7 @@
             
             <form action="{% url 'admin_portal:admin_logout' %}" method="post" style="display:inline;">
                 {% csrf_token %}
-                <button type="submit" class="nav-link" style="background:none; border:none; padding:0; width:100%; text-align:left;">
+                <button type="submit" class="nav-link logout-btn" style="background:none; border:none; padding:0; width:100%; text-align:left;">
                     <i class="fas fa-sign-out-alt"></i>
                     Logout
                 </button>
