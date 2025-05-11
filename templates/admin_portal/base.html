@@ -21,6 +21,7 @@
             --custom-theme-color: #000000;
             --main-bg: #fff;
             --main-text: #222;
+            --btn-text-color: #fff;
             {% if settings_obj and settings_obj.theme == 'dark' %}
                 --sidebar-bg: #23272b;
                 --sidebar-hover: #343a40;
@@ -28,6 +29,7 @@
                 --custom-theme-color: #fff;
                 --main-bg: #181a1b;
                 --main-text: #fff;
+                --btn-text-color: #fff;
             {% elif settings_obj and settings_obj.theme == 'custom' %}
                 --sidebar-bg: {{ settings_obj.custom_theme_color }};
                 --sidebar-hover: {{ settings_obj.custom_theme_color }};
@@ -35,6 +37,12 @@
                 --custom-theme-color: {{ settings_obj.custom_theme_color }};
                 --main-bg: {{ settings_obj.custom_theme_color }};
                 --main-text: #fff;
+                {# Simple heuristic: if custom color is dark, use white text; if light, use dark text #}
+                {% if settings_obj.custom_theme_color|default:'#000000'|slice:'1:2' in '012345' %}
+                    --btn-text-color: #fff;
+                {% else %}
+                    --btn-text-color: #222;
+                {% endif %}
             {% endif %}
         }
 
@@ -56,55 +64,60 @@
         }
 
         /* Button styles */
+        .btn,
+        .btn-primary,
+        .btn-success,
+        .btn-danger,
+        .btn-warning,
+        .btn-info,
+        .btn-dark,
+        .btn-light,
+        .btn-secondary {
+            color: var(--btn-text-color) !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+        }
+
         .btn {
             border-radius: 0.25rem;
         }
 
         .btn-light {
             background-color: var(--main-bg) !important;
-            color: var(--main-text) !important;
             border-color: var(--text-muted) !important;
         }
 
         .btn-dark {
             background-color: var(--main-text) !important;
-            color: var(--main-bg) !important;
         }
 
         .btn-primary {
             background-color: var(--custom-theme-color) !important;
             border-color: var(--custom-theme-color) !important;
-            color: var(--main-bg) !important;
         }
 
         .btn-secondary {
             background-color: var(--text-muted) !important;
             border-color: var(--text-muted) !important;
-            color: var(--main-bg) !important;
         }
 
         .btn-success {
             background-color: var(--custom-theme-color) !important;
             border-color: var(--custom-theme-color) !important;
-            color: var(--main-bg) !important;
         }
 
         .btn-danger {
             background-color: var(--custom-theme-color) !important;
             border-color: var(--custom-theme-color) !important;
-            color: var(--main-bg) !important;
         }
 
         .btn-warning {
             background-color: var(--custom-theme-color) !important;
             border-color: var(--custom-theme-color) !important;
-            color: var(--main-bg) !important;
         }
 
         .btn-info {
             background-color: var(--custom-theme-color) !important;
             border-color: var(--custom-theme-color) !important;
-            color: var(--main-bg) !important;
         }
 
         /* Alert styles */
