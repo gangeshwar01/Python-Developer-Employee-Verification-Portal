@@ -18,10 +18,17 @@
             --sidebar-bg: #f8f9fa;
             --sidebar-hover: #e9ecef;
             --text-muted: #6c757d;
-            {% if settings_obj and settings_obj.custom_theme_color %}
-            --custom-theme-color: {{ settings_obj.custom_theme_color }};
-            {% else %}
             --custom-theme-color: #000000;
+            {% if settings_obj and settings_obj.theme == 'dark' %}
+                --sidebar-bg: #23272b;
+                --sidebar-hover: #343a40;
+                --text-muted: #adb5bd;
+                --custom-theme-color: #fff;
+            {% elif settings_obj and settings_obj.theme == 'custom' %}
+                --sidebar-bg: {{ settings_obj.custom_theme_color }};
+                --sidebar-hover: {{ settings_obj.custom_theme_color }};
+                --text-muted: #fff;
+                --custom-theme-color: {{ settings_obj.custom_theme_color }};
             {% endif %}
         }
 

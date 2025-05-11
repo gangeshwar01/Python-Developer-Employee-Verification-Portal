@@ -53,6 +53,6 @@ class SiteSettingsForm(forms.ModelForm):
         model = SiteSettings
         fields = ['logo', 'theme', 'custom_theme_color']
         widgets = {
-            'theme': forms.Select(choices=[('light', 'Light'), ('dark', 'Dark')]),
+            'theme': forms.Select(choices=[('light', 'Light'), ('dark', 'Dark'), ('custom', 'Custom')]),
             'custom_theme_color': forms.TextInput(attrs={'type': 'color'})
         } 
