@@ -12,6 +12,11 @@
     <h3>Change Admin Password</h3>
     <form method="post">
         {% csrf_token %}
+        {% if password_form.errors %}
+            <div class="alert alert-danger">
+                {{ password_form.errors }}
+            </div>
+        {% endif %}
         {{ password_form.as_p }}
         <button type="submit" name="change_password" class="btn btn-warning">Change Password</button>
     </form>

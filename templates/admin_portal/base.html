@@ -19,21 +19,29 @@
             --sidebar-hover: #e9ecef;
             --text-muted: #6c757d;
             --custom-theme-color: #000000;
+            --main-bg: #fff;
+            --main-text: #222;
             {% if settings_obj and settings_obj.theme == 'dark' %}
                 --sidebar-bg: #23272b;
                 --sidebar-hover: #343a40;
                 --text-muted: #adb5bd;
                 --custom-theme-color: #fff;
+                --main-bg: #181a1b;
+                --main-text: #fff;
             {% elif settings_obj and settings_obj.theme == 'custom' %}
                 --sidebar-bg: {{ settings_obj.custom_theme_color }};
                 --sidebar-hover: {{ settings_obj.custom_theme_color }};
                 --text-muted: #fff;
                 --custom-theme-color: {{ settings_obj.custom_theme_color }};
+                --main-bg: {{ settings_obj.custom_theme_color }};
+                --main-text: #fff;
             {% endif %}
         }
 
         body {
             min-height: 100vh;
+            background: var(--main-bg);
+            color: var(--main-text);
         }
 
         #sidebar {
@@ -76,6 +84,8 @@
             min-height: 100vh;
             padding: 1rem;
             transition: margin-left 0.3s ease;
+            background: var(--main-bg);
+            color: var(--main-text);
         }
 
         .company-logo {
@@ -130,6 +140,11 @@
             border-radius: 50%;
             transform: translate(50%, -50%);
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card, .table-container, .modal-content, .performance-section, .table, .table th, .table td {
+            background: var(--main-bg) !important;
+            color: var(--main-text) !important;
         }
 
         @media (max-width: 768px) {
