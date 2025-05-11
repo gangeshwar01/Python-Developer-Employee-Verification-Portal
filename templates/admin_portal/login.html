@@ -21,14 +21,24 @@
                 <label for="id_password" class="form-label">Password</label>
                 <input type="password" name="password" required class="form-control" id="id_password" placeholder="Enter password">
             </div>
-            <button type="submit" class="btn btn-dark w-100">Login</button>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
     </div>
 {% endblock %}
 
+{% block extra_css %}
 <style>
-.card {
+.login-bg {
     background: var(--main-bg) !important;
-    color: var(--main-text) !important;
 }
-</style> 
+.login-content {
+    margin-left: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 0;
+    background: var(--main-bg) !important;
+}
+</style>
+{% endblock %} 
