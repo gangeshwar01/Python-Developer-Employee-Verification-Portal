@@ -23,7 +23,7 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead class="bg-light">
+                    <thead>
                         <tr>
                             <th class="py-3">No</th>
                             <th class="py-3">Name</th>
@@ -168,17 +168,15 @@
 }
 
 /* Table styling */
+.table th, .table td {
+    background: var(--main-bg) !important;
+    color: var(--main-text) !important;
+}
+
 .table th {
     font-weight: 600;
     color: var(--main-text);
     border-bottom-width: 1px;
-    background: var(--main-bg);
-}
-
-.table td {
-    vertical-align: middle;
-    color: var(--main-text);
-    background: var(--main-bg);
 }
 
 .btn-group .btn {
@@ -194,7 +192,7 @@
     color: var(--main-text);
 }
 
-.bg-light {
+.bg-light, .bg-white, .table-light {
     background-color: var(--sidebar-hover) !important;
 }
 

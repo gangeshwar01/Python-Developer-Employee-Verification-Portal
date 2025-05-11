@@ -10,7 +10,7 @@
         <div class="card-body p-0">
             <div class="table-responsive-sm table-responsive-md table-responsive-lg">
                 <table class="table table-hover mb-0 align-middle">
-                    <thead class="bg-light">
+                    <thead>
                         <tr>
                             <th class="py-3" style="width: 80px; min-width: 60px;">No</th>
                             <th class="py-3" style="min-width: 180px;">
@@ -237,17 +237,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <style>
 /* Table styling */
+.table th, .table td {
+    background: var(--main-bg) !important;
+    color: var(--main-text) !important;
+}
+
 .table th {
     font-weight: 600;
     color: var(--main-text);
     border-bottom-width: 1px;
-    background: var(--main-bg);
 }
 
 .table td {
     vertical-align: middle;
-    color: var(--main-text);
-    background: var(--main-bg);
 }
 
 /* Card styling */
@@ -258,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
     color: var(--main-text);
 }
 
-.bg-light {
+.bg-light, .bg-white, .table-light {
     background-color: var(--sidebar-hover) !important;
 }
 
