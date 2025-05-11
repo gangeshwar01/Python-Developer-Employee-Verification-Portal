@@ -46,13 +46,18 @@
         }
 
         /* Override Bootstrap classes */
-        .bg-light, .bg-white, .table-light, .bg-body {
+        .bg-light, .bg-white, .table-light, .bg-body, .bg-primary, .bg-secondary, .bg-success, .bg-danger, .bg-warning, .bg-info {
             background-color: var(--main-bg) !important;
             color: var(--main-text) !important;
         }
 
-        .text-muted {
+        .text-muted, .text-primary, .text-secondary, .text-success, .text-danger, .text-warning, .text-info {
             color: var(--text-muted) !important;
+        }
+
+        /* Button styles */
+        .btn {
+            border-radius: 0.25rem;
         }
 
         .btn-light {
@@ -78,30 +83,54 @@
             color: var(--main-bg) !important;
         }
 
+        .btn-success {
+            background-color: var(--custom-theme-color) !important;
+            border-color: var(--custom-theme-color) !important;
+            color: var(--main-bg) !important;
+        }
+
+        .btn-danger {
+            background-color: var(--custom-theme-color) !important;
+            border-color: var(--custom-theme-color) !important;
+            color: var(--main-bg) !important;
+        }
+
+        .btn-warning {
+            background-color: var(--custom-theme-color) !important;
+            border-color: var(--custom-theme-color) !important;
+            color: var(--main-bg) !important;
+        }
+
+        .btn-info {
+            background-color: var(--custom-theme-color) !important;
+            border-color: var(--custom-theme-color) !important;
+            color: var(--main-bg) !important;
+        }
+
+        /* Alert styles */
         .alert {
             background-color: var(--main-bg) !important;
             color: var(--main-text) !important;
             border-color: var(--text-muted) !important;
         }
 
-        .alert-success {
-            border-color: #28a745 !important;
+        .alert-success, .alert-danger, .alert-warning, .alert-info {
+            border-color: var(--custom-theme-color) !important;
         }
 
-        .alert-danger {
-            border-color: #dc3545 !important;
+        /* Badge styles */
+        .badge {
+            background-color: var(--custom-theme-color) !important;
+            color: var(--main-bg) !important;
         }
 
-        .alert-warning {
-            border-color: #ffc107 !important;
-        }
-
-        .alert-info {
-            border-color: #17a2b8 !important;
+        .badge.bg-primary, .badge.bg-secondary, .badge.bg-success, .badge.bg-danger, .badge.bg-warning, .badge.bg-info {
+            background-color: var(--custom-theme-color) !important;
+            color: var(--main-bg) !important;
         }
 
         /* Card and table styles */
-        .card, .modal-content, .table, .table th, .table td {
+        .card, .modal-content, .table, .table th, .table td, .list-group-item {
             background: var(--main-bg) !important;
             color: var(--main-text) !important;
         }
@@ -223,6 +252,21 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
+        /* Login page styles */
+        .login-bg {
+            background: var(--main-bg) !important;
+        }
+
+        .login-content {
+            margin-left: 0 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 0;
+            background: var(--main-bg) !important;
+        }
+
         @media (max-width: 768px) {
             #sidebar {
                 transform: translateX(-100%);
@@ -238,19 +282,6 @@
                 margin-left: 0;
             }
         }
-    </style>
-    <style>
-    .login-bg {
-        background: #fff;
-    }
-    .login-content {
-        margin-left: 0 !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        padding: 0;
-    }
     </style>
     {% block extra_css %}{% endblock %}
 </head>

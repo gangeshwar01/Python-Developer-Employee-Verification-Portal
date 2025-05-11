@@ -1,44 +1,109 @@
-{% extends "admin_portal/base.html" %}
+{% extends 'admin_portal/base.html' %}
+{% load static %}
 
 {% block title %}Admin Login{% endblock %}
 
-{% block content %}
-    <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
-        <h2 class="mb-4 text-center">Admin Portal Login</h2>
-        {% if form.errors %}
-            <div class="alert alert-danger">Invalid username or password.</div>
-        {% endif %}
-        <form method="post" novalidate>
-            {% csrf_token %}
-            {% if request.GET.next and request.GET.next|slice:':1' == '/' %}
-                <input type="hidden" name="next" value="{{ request.GET.next }}">
-            {% endif %}
-            <div class="mb-3">
-                <label for="id_username" class="form-label">Username</label>
-                <input type="text" name="username" autofocus required class="form-control" id="id_username" placeholder="Enter username">
-            </div>
-            <div class="mb-3">
-                <label for="id_password" class="form-label">Password</label>
-                <input type="password" name="password" required class="form-control" id="id_password" placeholder="Enter password">
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Login</button>
-        </form>
-    </div>
-{% endblock %}
-
 {% block extra_css %}
 <style>
-.login-bg {
-    background: var(--main-bg) !important;
-}
-.login-content {
-    margin-left: 0 !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 0;
-    background: var(--main-bg) !important;
-}
+    .login-container {
+        max-width: 400px;
+        width: 100%;
+        padding: 2rem;
+        background: var(--main-bg) !important;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .login-header img {
+        max-width: 150px;
+        height: auto;
+        margin-bottom: 1rem;
+    }
+
+    .login-form .form-control {
+        background: var(--main-bg) !important;
+        color: var(--main-text) !important;
+        border: 1px solid var(--text-muted) !important;
+    }
+
+    .login-form .form-control:focus {
+        border-color: var(--custom-theme-color) !important;
+        box-shadow: 0 0 0 0.2rem rgba(var(--custom-theme-color), 0.25) !important;
+    }
+
+    .login-form .btn-primary {
+        background: var(--custom-theme-color) !important;
+        border-color: var(--custom-theme-color) !important;
+        color: var(--main-bg) !important;
+    }
+
+    .login-form .btn-primary:hover {
+        opacity: 0.9;
+    }
+
+    .login-footer {
+        text-align: center;
+        margin-top: 1rem;
+        color: var(--text-muted) !important;
+    }
 </style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-header">
+        {% if settings_obj and settings_obj.logo %}
+            <img src="{{ settings_obj.logo.url }}" alt="Logo">
+        {% else %}
+            <img src="{% static 'images/zikr_logo.webp' %}" alt="Company Logo">
+        {% endif %}
+        <h2 class="text-center mb-4">Admin Login</h2>
+    </div>
+
+    <form method="post" class="login-form">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div class="mb-3">
+            <label for="id_username" class="form-label">Username</label>
+            <input type="text" name="username" id="id_username" class="form-control" required>
+            {% if form.username.errors %}
+                <div class="invalid-feedback d-block">
+                    {% for error in form.username.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_password" class="form-label">Password</label>
+            <input type="password" name="password" id="id_password" class="form-control" required>
+            {% if form.password.errors %}
+                <div class="invalid-feedback d-block">
+                    {% for error in form.password.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+
+    <div class="login-footer">
+        <p>&copy; {% now "Y" %} Zikr. All rights reserved.</p>
+    </div>
+</div>
 {% endblock %} 
