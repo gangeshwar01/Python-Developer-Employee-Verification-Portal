@@ -309,7 +309,7 @@
     {% endif %}
     <!-- Sidebar -->
     {% if request.user.is_authenticated %}
-    <nav id="sidebar">
+    <nav id="sidebar" style="display: flex; flex-direction: column; height: 100vh;">
         <div class="company-logo">
             {% if settings_obj and settings_obj.logo %}
                 <img src="{{ settings_obj.logo.url }}" alt="Logo" style="max-width: 150px; height: auto;">
@@ -317,28 +317,23 @@
                 <img src="{% static 'images/zikr_logo.webp' %}" alt="Company Logo" style="max-width: 150px; height: auto;">
             {% endif %}
         </div>
-        
-        <div class="nav flex-column">
+        <div class="nav flex-column" style="flex: 1 1 auto;">
             <a href="{% url 'admin_portal:admin_dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
                 <i class="fas fa-chart-line"></i>
                 Dashboard
             </a>
-            
             <a href="{% url 'admin_portal:department_list' %}" class="nav-link {% if 'department' in request.resolver_match.url_name %}active{% endif %}">
                 <i class="fas fa-building"></i>
                 Department
             </a>
-            
             <a href="{% url 'admin_portal:employee_list' %}" class="nav-link {% if 'employee' in request.resolver_match.url_name %}active{% endif %}">
                 <i class="fas fa-users"></i>
                 Employees
             </a>
-            
             <a href="{% url 'admin_portal:user_group_list' %}" class="nav-link {% if 'user_group' in request.resolver_match.url_name %}active{% endif %}">
                 <i class="fas fa-user-group"></i>
                 User Group
             </a>
-            
             <a href="{% url 'admin_portal:notification_list' %}" class="nav-link {% if 'notification' in request.resolver_match.url_name %}active{% endif %}">
                 <i class="fas fa-bell"></i>
                 Notifications
@@ -346,14 +341,11 @@
                     <span class="badge bg-danger rounded-pill position-absolute" style="top: 0.5rem; right: 0.5rem; font-size: 0.7rem;">{{ unread_count }}</span>
                 {% endif %}
             </a>
-            
             <div class="nav-divider"></div>
-            
             <a href="{% url 'admin_portal:site_settings' %}" class="nav-link {% if request.resolver_match.url_name == 'site_settings' %}active{% endif %}">
                 <i class="fas fa-cog"></i>
                 Settings
             </a>
-            
             <li class="nav-item">
                 <a class="nav-link {% if request.resolver_match.url_name == 'certificate_list' %}active{% endif %}" href="{% url 'admin_portal:certificate_list' %}">
                     <i class="fas fa-certificate me-2"></i>Certificates
@@ -367,7 +359,8 @@
                     {% endif %}
                 </a>
             </li>
-            
+        </div>
+        <div style="padding-bottom: 1.5rem;">
             <form action="{% url 'admin_portal:admin_logout' %}" method="post" style="display:inline;">
                 {% csrf_token %}
                 <button type="submit" class="nav-link logout-btn" style="background:none; border:none; padding:0; width:100%; text-align:left;">
