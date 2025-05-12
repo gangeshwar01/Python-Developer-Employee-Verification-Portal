@@ -209,14 +209,6 @@
             transition: margin-left 0.3s ease;
             background: var(--main-bg) !important;
             color: var(--main-text) !important;
-            position: relative;
-        }
-
-        .logout-button {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            z-index: 1000;
         }
 
         .company-logo {
@@ -396,7 +388,13 @@
             </div>
         </div>
         <div style="padding: 1.5rem 0 1.5rem 0;">
-            <!-- Removed duplicate logout button -->
+            <form action="{% url 'admin_portal:admin_logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="nav-link logout-btn" style="background:none; border:none; padding:0; width:100%; text-align:left;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </form>
         </div>
     </nav>
     {% endif %}
@@ -412,14 +410,6 @@
                 </div>
             {% endfor %}
         {% endif %}
-        <div class="logout-button">
-            <form action="{% url 'admin_portal:admin_logout' %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </form>
-        </div>
         {% block content %}{% endblock %}
         </div>
     </main>
