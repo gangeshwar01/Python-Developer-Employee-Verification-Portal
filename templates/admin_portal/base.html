@@ -372,7 +372,6 @@
                     <span class="badge bg-danger rounded-pill position-absolute" style="top: 0.5rem; right: 0.5rem; font-size: 0.7rem;">{{ unread_count }}</span>
                 {% endif %}
             </a>
-            <div class="nav-divider"></div>
             <a href="{% url 'admin_portal:site_settings' %}" class="nav-link {% if request.resolver_match.url_name == 'site_settings' %}active{% endif %}">
                 <i class="fas fa-cog"></i>
                 Settings
