@@ -388,6 +388,16 @@
             background: var(--sidebar-hover) !important;
             color: var(--main-text) !important;
         }
+        /* Force modal table header and row backgrounds to use dark theme */
+        .modal-content .table th,
+        .modal-content .table thead th {
+            background: var(--sidebar-hover) !important;
+            color: var(--main-text) !important;
+        }
+        .modal-content .table td {
+            background: var(--main-bg) !important;
+            color: var(--main-text) !important;
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
