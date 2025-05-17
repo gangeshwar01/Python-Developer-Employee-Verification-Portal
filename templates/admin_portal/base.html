@@ -12,40 +12,63 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
+    {% if settings_obj and settings_obj.theme == 'dark' %}
     <style>
+    :root {
+        --sidebar-width: 260px;
+        --sidebar-bg: #23272b;
+        --sidebar-hover: #343a40;
+        --text-muted: #adb5bd;
+        --custom-theme-color: #0d6efd;
+        --main-bg: #181a1b;
+        --main-text: #fff;
+        --btn-text-color: #fff;
+    }
+    </style>
+    {% elif settings_obj and settings_obj.theme == 'custom' %}
+        {% if settings_obj.custom_theme_color|default:'#000000'|slice:'1:2' in '012345' %}
+        <style>
         :root {
             --sidebar-width: 260px;
-            --sidebar-bg: #f8f9fa;
-            --sidebar-hover: #e9ecef;
-            --text-muted: #6c757d;
-            --custom-theme-color: #000000;
-            --main-bg: #fff;
-            --main-text: #222;
-            --btn-text-color: #fff;
-{% if settings_obj and settings_obj.theme == 'dark' %}
-            --sidebar-bg: #23272b;
-            --sidebar-hover: #343a40;
-            --text-muted: #adb5bd;
-            --custom-theme-color: #0d6efd;
-            --main-bg: #181a1b;
-            --main-text: #fff;
-            --btn-text-color: #fff;
-{% elif settings_obj and settings_obj.theme == 'custom' %}
             --sidebar-bg: {{ settings_obj.custom_theme_color }};
             --sidebar-hover: {{ settings_obj.custom_theme_color }};
             --text-muted: #fff;
             --custom-theme-color: {{ settings_obj.custom_theme_color }};
             --main-bg: {{ settings_obj.custom_theme_color }};
             --main-text: #fff;
-            {# Simple heuristic: if custom color is dark, use white text; if light, use dark text #}
-{% if settings_obj.custom_theme_color|default:'#000000'|slice:'1:2' in '012345' %}
             --btn-text-color: #fff;
-{% else %}
-            --btn-text-color: #222;
-{% endif %}
-{% endif %}
         }
+        </style>
+        {% else %}
+        <style>
+        :root {
+            --sidebar-width: 260px;
+            --sidebar-bg: {{ settings_obj.custom_theme_color }};
+            --sidebar-hover: {{ settings_obj.custom_theme_color }};
+            --text-muted: #fff;
+            --custom-theme-color: {{ settings_obj.custom_theme_color }};
+            --main-bg: {{ settings_obj.custom_theme_color }};
+            --main-text: #fff;
+            --btn-text-color: #222;
+        }
+        </style>
+        {% endif %}
+    {% else %}
+    <style>
+    :root {
+        --sidebar-width: 260px;
+        --sidebar-bg: #f8f9fa;
+        --sidebar-hover: #e9ecef;
+        --text-muted: #6c757d;
+        --custom-theme-color: #000000;
+        --main-bg: #fff;
+        --main-text: #222;
+        --btn-text-color: #fff;
+    }
+    </style>
+    {% endif %}
 
+    <style>
         /* Global theme overrides */
         body {
             min-height: 100vh;
