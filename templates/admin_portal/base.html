@@ -25,6 +25,35 @@
         --btn-text-color: #fff;
     }
     </style>
+    <style>
+    /* Force all buttons to blue in dark mode */
+    .btn,
+    .btn-primary,
+    .btn-secondary,
+    .btn-success,
+    .btn-danger,
+    .btn-warning,
+    .btn-info,
+    .btn-dark,
+    .btn-light {
+        background-color: #0d6efd !important;
+        border-color: #0d6efd !important;
+        color: #fff !important;
+    }
+    .btn:hover,
+    .btn-primary:hover,
+    .btn-secondary:hover,
+    .btn-success:hover,
+    .btn-danger:hover,
+    .btn-warning:hover,
+    .btn-info:hover,
+    .btn-dark:hover,
+    .btn-light:hover {
+        background-color: #0b5ed7 !important;
+        border-color: #0a58ca !important;
+        color: #fff !important;
+    }
+    </style>
     {% elif settings_obj and settings_obj.theme == 'custom' %}
         {% if settings_obj.custom_theme_color|default:'#000000'|slice:'1:2' in '012345' %}
         <style>
