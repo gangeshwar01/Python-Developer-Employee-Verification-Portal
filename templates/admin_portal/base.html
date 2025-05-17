@@ -468,6 +468,30 @@
     }
     </style>
     {% endif %}
+    {% if settings_obj and settings_obj.theme == 'dark' %}
+    <style>
+    /* Make .btn-link always transparent, even if combined with .btn or other classes */
+    .btn.btn-link,
+    a.btn.btn-link,
+    button.btn.btn-link {
+        background: transparent !important;
+        color: #0d6efd !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+    .btn.btn-link:hover,
+    a.btn.btn-link:hover,
+    button.btn.btn-link:hover,
+    .btn.btn-link:focus,
+    a.btn.btn-link:focus,
+    button.btn.btn-link:focus {
+        background: transparent !important;
+        color: #0b5ed7 !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+    </style>
+    {% endif %}
     {% block extra_css %}{% endblock %}
 </head>
 <body{% if not request.user.is_authenticated %} class="login-bg"{% endif %}>
