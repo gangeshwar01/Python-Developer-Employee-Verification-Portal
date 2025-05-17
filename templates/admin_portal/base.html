@@ -22,28 +22,28 @@
             --main-bg: #fff;
             --main-text: #222;
             --btn-text-color: #fff;
-            {% if settings_obj and settings_obj.theme == 'dark' %}
-                --sidebar-bg: #23272b;
-                --sidebar-hover: #343a40;
-                --text-muted: #adb5bd;
-                --custom-theme-color: #fff;
-                --main-bg: #181a1b;
-                --main-text: #fff;
-                --btn-text-color: #fff;
-            {% elif settings_obj and settings_obj.theme == 'custom' %}
-                --sidebar-bg: {{ settings_obj.custom_theme_color }};
-                --sidebar-hover: {{ settings_obj.custom_theme_color }};
-                --text-muted: #fff;
-                --custom-theme-color: {{ settings_obj.custom_theme_color }};
-                --main-bg: {{ settings_obj.custom_theme_color }};
-                --main-text: #fff;
-                {# Simple heuristic: if custom color is dark, use white text; if light, use dark text #}
-                {% if settings_obj.custom_theme_color|default:'#000000'|slice:'1:2' in '012345' %}
-                    --btn-text-color: #fff;
-                {% else %}
-                    --btn-text-color: #222;
-                {% endif %}
-            {% endif %}
+{% if settings_obj and settings_obj.theme == 'dark' %}
+            --sidebar-bg: #23272b;
+            --sidebar-hover: #343a40;
+            --text-muted: #adb5bd;
+            --custom-theme-color: #0d6efd;
+            --main-bg: #181a1b;
+            --main-text: #fff;
+            --btn-text-color: #fff;
+{% elif settings_obj and settings_obj.theme == 'custom' %}
+            --sidebar-bg: {{ settings_obj.custom_theme_color }};
+            --sidebar-hover: {{ settings_obj.custom_theme_color }};
+            --text-muted: #fff;
+            --custom-theme-color: {{ settings_obj.custom_theme_color }};
+            --main-bg: {{ settings_obj.custom_theme_color }};
+            --main-text: #fff;
+            {# Simple heuristic: if custom color is dark, use white text; if light, use dark text #}
+{% if settings_obj.custom_theme_color|default:'#000000'|slice:'1:2' in '012345' %}
+            --btn-text-color: #fff;
+{% else %}
+            --btn-text-color: #222;
+{% endif %}
+{% endif %}
         }
 
         /* Global theme overrides */
