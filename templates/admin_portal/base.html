@@ -105,8 +105,15 @@
         }
 
         .btn-light {
-            background-color: var(--main-bg) !important;
-            border-color: var(--text-muted) !important;
+            background-color: var(--sidebar-hover) !important;
+            color: var(--main-text) !important;
+            border-color: var(--sidebar-hover) !important;
+        }
+
+        .btn-light:hover, .btn-light:focus {
+            background-color: var(--sidebar-bg) !important;
+            color: var(--main-text) !important;
+            border-color: var(--sidebar-bg) !important;
         }
 
         .btn-dark {
@@ -354,6 +361,32 @@
             font-size: 0.97em;
             padding: 0.5rem 1rem;
             margin-bottom: 0.2rem;
+        }
+
+        /* Fix for .btn-light and modal buttons in dark mode */
+        .btn-light {
+            background-color: var(--sidebar-hover) !important;
+            color: var(--main-text) !important;
+            border-color: var(--sidebar-hover) !important;
+        }
+        .btn-light:hover, .btn-light:focus {
+            background-color: var(--sidebar-bg) !important;
+            color: var(--main-text) !important;
+            border-color: var(--sidebar-bg) !important;
+        }
+        .modal-footer .btn, .modal-footer .btn-light {
+            background-color: var(--custom-theme-color) !important;
+            color: #fff !important;
+            border: none !important;
+        }
+        /* Modal content and table headers in modals */
+        .modal-content, .modal-header, .modal-body, .modal-footer {
+            background: var(--main-bg) !important;
+            color: var(--main-text) !important;
+        }
+        .table th, .table thead th {
+            background: var(--sidebar-hover) !important;
+            color: var(--main-text) !important;
         }
     </style>
     {% block extra_css %}{% endblock %}
