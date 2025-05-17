@@ -54,46 +54,6 @@
         color: #fff !important;
     }
     </style>
-    <style>
-    /* Strongest override: force all buttons and modal buttons to blue in dark mode, even with inline styles */
-    button,
-    input[type="button"],
-    input[type="submit"],
-    .btn,
-    .btn-primary,
-    .btn-secondary,
-    .btn-success,
-    .btn-danger,
-    .btn-warning,
-    .btn-info,
-    .btn-dark,
-    .btn-light,
-    .modal-footer .btn,
-    .modal-footer .btn-light {
-        background-color: #0d6efd !important;
-        border-color: #0d6efd !important;
-        color: #fff !important;
-        box-shadow: none !important;
-    }
-    button:hover,
-    input[type="button"]:hover,
-    input[type="submit"]:hover,
-    .btn:hover,
-    .btn-primary:hover,
-    .btn-secondary:hover,
-    .btn-success:hover,
-    .btn-danger:hover,
-    .btn-warning:hover,
-    .btn-info:hover,
-    .btn-dark:hover,
-    .btn-light:hover,
-    .modal-footer .btn:hover,
-    .modal-footer .btn-light:hover {
-        background-color: #0b5ed7 !important;
-        border-color: #0a58ca !important;
-        color: #fff !important;
-    }
-    </style>
     {% elif settings_obj and settings_obj.theme == 'custom' %}
         {% if settings_obj.custom_theme_color|default:'#000000'|slice:'1:2' in '012345' %}
         <style>
@@ -468,6 +428,23 @@
             color: var(--main-text) !important;
         }
     </style>
+    {% if settings_obj and settings_obj.theme == 'dark' %}
+    <style>
+    /* ABSOLUTE OVERRIDE: Make all buttons blue in dark mode, regardless of local CSS */
+    button.btn, a.btn, input[type="button"].btn, input[type="submit"].btn,
+    .btn, .btn-primary, .btn-secondary, .btn-success, .btn-danger, .btn-warning, .btn-info, .btn-dark, .btn-light {
+        background-color: #0d6efd !important;
+        border-color: #0d6efd !important;
+        color: #fff !important;
+    }
+    button.btn:hover, a.btn:hover, input[type="button"].btn:hover, input[type="submit"].btn:hover,
+    .btn:hover, .btn-primary:hover, .btn-secondary:hover, .btn-success:hover, .btn-danger:hover, .btn-warning:hover, .btn-info:hover, .btn-dark:hover, .btn-light:hover {
+        background-color: #0b5ed7 !important;
+        border-color: #0a58ca !important;
+        color: #fff !important;
+    }
+    </style>
+    {% endif %}
     {% block extra_css %}{% endblock %}
 </head>
 <body{% if not request.user.is_authenticated %} class="login-bg"{% endif %}>
