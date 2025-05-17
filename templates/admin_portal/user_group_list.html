@@ -841,7 +841,20 @@
             addMemberModalEl.addEventListener('hidden.bs.modal', function () {
                 // Reset checkboxes and form
                 document.querySelectorAll('.employee-checkbox').forEach(cb => cb.checked = false);
-                // Optionally reset form fields or state here
+                // Remove any lingering modal backdrops
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.parentNode.removeChild(el));
+                // Enable buttons if needed
+                if (!selectedGroupId) {
+                    addMemberBtn.disabled = true;
+                    addCompetencyBtn.disabled = true;
+                }
+                // Dispose modal instance if needed
+                if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                    const modalInstance = bootstrap.Modal.getInstance(addMemberModalEl);
+                    if (modalInstance) modalInstance.hide();
+                }
+                document.body.classList.remove('modal-open');
+                document.body.style.overflow = '';
             });
         }
     });
