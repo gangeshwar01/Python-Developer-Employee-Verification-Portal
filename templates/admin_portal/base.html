@@ -445,6 +445,13 @@
     }
     </style>
     {% endif %}
+    {% if settings_obj and settings_obj.theme == 'dark' %}
+    <style>
+    .group-name {
+        color: #fff !important;
+    }
+    </style>
+    {% endif %}
     {% block extra_css %}{% endblock %}
 </head>
 <body{% if not request.user.is_authenticated %} class="login-bg"{% endif %}>

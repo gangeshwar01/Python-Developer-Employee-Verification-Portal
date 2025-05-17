@@ -86,7 +86,7 @@
 
     .group-name {
         cursor: pointer;
-        color: #000;
+        color: var(--main-text) !important;
         text-decoration: none;
     }
 
@@ -300,6 +300,16 @@
         font-size: 1rem;
         margin: 0;
         color: #000;
+    }
+
+    .employee-table th, .employee-table thead th {
+        background: var(--sidebar-hover) !important;
+        color: var(--main-text) !important;
+    }
+
+    .employee-table td {
+        background: var(--main-bg) !important;
+        color: var(--main-text) !important;
     }
 </style>
 {% endblock %}
@@ -824,6 +834,16 @@
                 }
             });
         });
+
+        // Fix: Ensure modal closes and resets state
+        const addMemberModalEl = document.getElementById('addMemberModal');
+        if (addMemberModalEl) {
+            addMemberModalEl.addEventListener('hidden.bs.modal', function () {
+                // Reset checkboxes and form
+                document.querySelectorAll('.employee-checkbox').forEach(cb => cb.checked = false);
+                // Optionally reset form fields or state here
+            });
+        }
     });
 
     function renderStars(rating) {
