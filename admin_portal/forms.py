@@ -4,13 +4,13 @@ from .models import Employee, Task, Certificate, SiteSettings
 class EmployeeForm(forms.ModelForm):
     password = forms.CharField(label='Password', widget=forms.PasswordInput, required=False, help_text='Set or change the password.')
     profile_image = forms.FileField(required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
+    join_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}), help_text='Select the date in YYYY-MM-DD format')
+    left_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}), required=False, help_text='Select the date in YYYY-MM-DD format (optional)')
 
     class Meta:
         model = Employee
         fields = ['emp_id', 'name', 'designation', 'join_date', 'left_date', 'phone', 'address', 'profile_image', 'department', 'email']
         widgets = {
-            'join_date': forms.DateInput(attrs={'type': 'date'}),
-            'left_date': forms.DateInput(attrs={'type': 'date'}),
             'address': forms.Textarea(attrs={'rows': 2}),
         }
 
