@@ -32,7 +32,12 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-your-secret-key-here')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS','https://employee-verification-72r5.onrender.com').split(',')
+ALLOWED_HOSTS = [
+    'employee-verification-72r5.onrender.com',
+    'employee-verification-portal-14ey.onrender.com',
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
