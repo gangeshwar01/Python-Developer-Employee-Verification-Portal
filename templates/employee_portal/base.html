@@ -127,7 +127,7 @@
     </style>
 </head>
 <body>
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated or 'employee_id' in request.session %}
     <form action="{% url 'employee_portal:employee_logout' %}" method="post" style="position: fixed; top: 1.5rem; right: 2rem; z-index: 1100;">
         {% csrf_token %}
         <button type="submit" class="btn btn-outline-danger btn-sm d-flex align-items-center" style="gap: 0.5rem;">
