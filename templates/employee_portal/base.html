@@ -127,13 +127,14 @@
     </style>
 </head>
 <body>
-    <!-- Logout button at top right -->
+    {% if user.is_authenticated %}
     <form action="{% url 'employee_portal:employee_logout' %}" method="post" style="position: fixed; top: 1.5rem; right: 2rem; z-index: 1100;">
         {% csrf_token %}
         <button type="submit" class="btn btn-outline-danger btn-sm d-flex align-items-center" style="gap: 0.5rem;">
             <i class="fas fa-sign-out-alt"></i> Logout
         </button>
     </form>
+    {% endif %}
     {% block content_wrapper %}
         {% block content %}{% endblock %}
     {% endblock %}
